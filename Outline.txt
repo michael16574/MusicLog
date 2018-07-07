@@ -1,0 +1,65 @@
+﻿Use: 
+Updates a MusicLog with recent scrobbles from Last.FM
+
+User Workflow:
+DONE 1) User inputs artist
+DONE 2) GUI returns all artists, shown in a list
+DONE 3) User checks all artists to add to MusicLog
+DONE 4) User listens to random music on spotify
+DONE 5) Program periodically checks last x days from last scan of user listens and 
+compares to existing data, utilizing new data to mark any songs in the particular album as “completed”
+6) User gets to see a list of “upcoming” songs that they have not yet completed
+DONE 7) User can also see time and date of previous listens
+Alternative Workflow:
+1) User needs to manually mark albums / songs as listened to
+2) User goes into upcoming list and marks songs listened to
+Alternative Workflow:
+1) User needs to unmark previous listens
+2) User goes into previous listen list and marks those as desired
+3) Program adds those songs back into the upcoming list in appropriate locations and deletes the list from listened to list
+
+
+Macroscopic Outline:
+
+Artist Object
+	Artist Name
+	Artist ID
+	Image Link
+	
+
+A. Authorizes Application
+	1)  https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Docs/docs/SpotifyWebAPI/auth.md
+
+B. Returns Struct (Artists)
+	1) Argument: String USER, String Artist
+	2) Spotify API-.NET
+		a. SearchItems - returns multiple items
+		b. Extract Artists into Struct
+	3) Returns Struct (Artists)
+
+C. Returns Struct (Albums)
+	1) Argument: Object Artist
+	2) Spotify API-.NET
+		a. SearchAlbums
+b. Extract Albums into Struct
+3) Returns Struct (Albums)
+D. Returns Scrobbles from Artist
+1) Argument: String Artist
+2) user.GetTracks
+
+
+E. Create XML Database
+F. Add Artist to database
+G. Add Album to existing Artist in database
+J. Set active database to Database
+K. Add Song to database
+
+H. Remove Artist from data base
+I. Remove Album from data base
+L. Remove Song from data base
+M. Modify Song Date
+
+Compare Song uts with Database Song’s uts
+
+Update Artist Song’s UTS
+

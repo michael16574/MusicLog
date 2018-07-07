@@ -4,12 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MusicLog
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
+
+        static void CreateSampleDatabase()
         {
             Database.DatabaseInstance activeDatabase = new Database.DatabaseInstance();
 
@@ -42,19 +51,14 @@ namespace MusicLog
                 artists.Add(newArtist);
             }
             activeDatabase.AddArtists(artists);
-      
 
-           
+
+
 
             activeDatabase.SerializeDatabase("database.xml");
 
             activeDatabase.DeserializeDatabase("database.xml");
-            long memory = GC.GetTotalMemory(true);
-
-            Console.WriteLine(memory/1000000);
-            Console.ReadKey();
         }
-
     }
 
 }

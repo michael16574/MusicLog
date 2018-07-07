@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="MusicLog.Analysis.ScrobbleChecker">
+    <Position X="8.25" Y="1.25" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Analysis\ScrobbleChecker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Database.Album">
+    <Position X="3.75" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAEAAAAAEAAAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Database\Album.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Database.Artist">
+    <Position X="2" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Database\Artist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Database.DatabaseInstance">
+    <Position X="3" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAABgAIQAIAACAAAAAAAgAAAEABAAAAAAMAAAAgAAAA=</HashCode>
+      <FileName>Database\DatabaseInstance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Database.DatabaseUtilities">
+    <Position X="5.75" Y="1.25" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="MusicLog.Database.DatabaseUtilities.AlbumNode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Database\DatabaseUtilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="MusicLog.Database.DatabaseUtilities.TrackNode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Database\DatabaseUtilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Database\DatabaseUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Database.Track">
+    <Position X="5.5" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAQAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Database\Track.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.DatabaseModule" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAMAAEBACQAAAACARChAAACAIAIAAQAQESQAYEAACA=</HashCode>
+      <FileName>DatabaseModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.InputModule" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AgAEAAQAACAAABEAAADAAAASAAAYAAQAUiQAAIAAAAA=</HashCode>
+      <FileName>InputModule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.MainForm" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAICAGAQAAAAAACAAABCEEAwAAQAADAAAAAAACA=</HashCode>
+      <FileName>MainForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Program" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.LastFM.LastFMAPIClient">
+    <Position X="9.75" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAABABAEIA=</HashCode>
+      <FileName>LastFM\LastFMAPIClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo">
+    <Position X="10.75" Y="7.75" Width="2.5" />
+    <NestedTypes>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Rootobject" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Attr" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Tags" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Track" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Image" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Artist" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Tag" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Streamable" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Tracks" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Wiki" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_AlbumGetInfo.Album" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_AlbumGetInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LastFM\LastFMResponse_AlbumGetInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks">
+    <Position X="8" Y="7.75" Width="2.5" />
+    <NestedTypes>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Artisttracks" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Attr" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Track" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Artist" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Album" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Date" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MusicLog.LastFM.LastFMResponse_ArtistTracks.Image" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>LastFM\LastFMResponse_GetArtistTracks.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LastFM\LastFMResponse_GetArtistTracks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.LastFM.LastFMUtilities">
+    <Position X="8.25" Y="3.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>LastFM\LastFMUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Properties.Resources" Collapsed="true">
+    <Position X="0.5" Y="1.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicLog.Spotify.SpotifyUtilities">
+    <Position X="12.75" Y="3.75" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAQEAAAAJAQAAAAAAoAEAAQAAAAAAIAAA=</HashCode>
+      <FileName>Spotify\SpotifyUtilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Database
+namespace MusicLog.Database
 {
     /// <summary>
     /// Contains methods for Database operation that do not modify such.
@@ -14,8 +14,16 @@ namespace Database
     {
         public static Artist FindArtistNode(string name, string id, List<Artist> artists)
         {
-            Artist activeArtist = artists.First(a => a.Name == name && a.Id == id);
-            return activeArtist;
+            Artist activeArtist = null;
+            try
+            {
+                activeArtist = artists.First(a => a.Name == name && a.Id == id);
+            }
+            catch (System.InvalidOperationException)
+            {
+                return null;
+            }          
+            return activeArtist;                
         }
 
         public static AlbumNode FindAlbumNode(string albumName, string albumId, string artistName, string artistId, List<Artist> artists)

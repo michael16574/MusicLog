@@ -4,16 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Database
+namespace MusicLog.Database
 {
     public class Album
     {
         public Album()
         {
             Tracks = new List<Track>();
+            Tracked = false;
         }
+        public Album(string name, string id)
+        {
+            Name = name;
+            Id = id;
+            Tracked = false;
+        }
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public string Name;
         public string Id;
+        public bool Tracked;
         public List<Track> Tracks;
     }
 }

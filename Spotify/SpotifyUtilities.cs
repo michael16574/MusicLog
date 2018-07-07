@@ -8,7 +8,7 @@ using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 
-namespace Spotify
+namespace MusicLog.Spotify
 {
     public static class SpotifyUtilities
     {
@@ -77,7 +77,7 @@ namespace Spotify
                 };
                 AlbumList.Add(newAlbum);
             }
-            return AlbumList;
+            return DeleteDuplicateAlbums(AlbumList);
         }
 
         private static List<SimpleAlbum> SearchAlbums(Database.Artist ArtistObj, SpotifyWebAPI AuthObj)
@@ -91,6 +91,35 @@ namespace Spotify
             return SimpleAlbumList;
         }
 
+        private static List<Database.Album> DeleteDuplicateAlbums(List<Database.Album> albums)
+        {
+            List<Database.Album> albumRemovalList = new List<Database.Album>();
+            for (int i = 1; i < albums.Count(); i++)
+            { 
+                for (int j = 0; j < i; j++)
+                {
+                    if (albums[i].Name == albums[j].Name)
+                    {
+                        if (albums[i].Tracks.Count() >= albums[j].Tracks.Count())
+                        {
+                            albumRemovalList.Add(albums[j]);
+                        }
+                        else
+                        {
+                            albumRemovalList.Add(albums[i]);
+                        }
+                    }
+                }               
+            }
+
+            foreach(var album in albumRemovalList)
+            {
+                albums.Remove(album);
+            }
+
+            return albums;
+        }
+
         public static List<Database.Track> GetTracks(Database.Album AlbumObj, SpotifyWebAPI AuthObj)
         {
             List<SimpleTrack> SimpleTrackList = SearchTracks(AlbumObj, AuthObj);
@@ -98,6 +127,7 @@ namespace Spotify
             foreach (SimpleTrack track in SimpleTrackList)
             {
                 Database.Track NewTrack = new Database.Track(track.Name);
+                NewTrack.TrackNo = track.TrackNumber;
                 TrackList.Add(NewTrack);
             }
             return TrackList;

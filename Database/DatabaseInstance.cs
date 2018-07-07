@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Database
+namespace MusicLog.Database
 {
     /// <summary>
     /// Contains database and methods pertaining to modification of such.
@@ -44,11 +44,31 @@ namespace Database
             NewArtist.Name = name;
             NewArtist.Id = id;
 
+            // Checking duplicity
+            var foundArtist = DatabaseUtilities.FindArtistNode(NewArtist.Name, NewArtist.Id, Artists);
+            if (foundArtist != null)
+            {
+                return;
+            }
             Artists.Add(NewArtist);
+
+            
         }
         public void AddArtists(List<Artist> artists)
         {
-            Artists.AddRange(artists);
+            List<Artist> uniqueArtists = new List<Artist>();
+
+            // Checking duplicity
+            foreach (var artist in artists)
+            {
+                var foundArtist = DatabaseUtilities.FindArtistNode(artist.Name, artist.Id, Artists);
+                if (foundArtist != null)
+                {
+                    continue;
+                }
+                uniqueArtists.Add(artist);
+            }
+            Artists.AddRange(uniqueArtists);           
         }
 
         public void RemoveArtist(Artist artist)
@@ -106,31 +126,32 @@ namespace Database
             }
         }
 
-        public void AddTracks(List<Track> tracks, string artistName, string albumName)
+        public void TrackAlbums(List<Album> albums)
         {
-            var activeAlbum =
-                from artist in Artists
-                where artist.Name == artistName
-                from album in artist.Albums
-                where album.Name == albumName
-                select album;
-
-            activeAlbum.First().Tracks = tracks;               
-        }
-        public void RemoveTrack(string trackName, string artistName, string albumName, string artistId, string albumId)
-        {
-            Artist activeArtist = Artists.First(a => a.Name == artistName && a.Id == artistId);
-            Album activeAlbum = activeArtist.Albums.First(a => a.Name == albumName && a.Id == albumId);
-            Track activeTrack = activeAlbum.Tracks.First(t => t.Name == trackName);
-
-            if (activeAlbum != null)
+            foreach(var album in albums)
             {
-                activeAlbum.Tracks.Remove(activeTrack);
+                album.Tracked = true;
             }
         }
+
+        public void AddTracks(List<Track> tracks, string albumName, string albumId, string artistName, string artistId)
+        {
+            DatabaseUtilities.AlbumNode activeAlbum = DatabaseUtilities.FindAlbumNode(albumName, albumId, artistName, artistId, Artists);            
+
+            activeAlbum.albumNode.Tracks.AddRange(tracks);               
+        }
+        public void RemoveTrack(string trackName, string albumName, string albumId, string artistName, string artistId)
+        {
+            DatabaseUtilities.TrackNode activeTrack = DatabaseUtilities.FindTrackNode(trackName, albumName, albumId, artistName, artistId, Artists);
+
+            if (activeTrack.trackNode != null)
+            {
+                activeTrack.albumNode.Tracks.Remove(activeTrack.trackNode);
+            }
+        }
+
         public void ModifyDate(Track track, int uts)
         {
-            track.ListenedState = true;
             track.LastListenedUTS = uts;
         }
 

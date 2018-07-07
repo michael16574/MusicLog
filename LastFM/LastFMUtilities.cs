@@ -4,27 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LastFM
+namespace MusicLog.LastFM
 {
     public static class LastFMUtilities
     {
-        public static List<Database.Track> GetUserTracks(string user, string artistName)
+        public static List<LastFMResponse_ArtistTracks.Track> GetUserTracks(string user, string artistName)
         {
-            LastFMAPIClient.LastFMResponse response = LastFMAPIClient.SearchUserTracks(user, artistName).Result;
-            var tracks = new List<Database.Track>();
-            foreach (LastFMAPIClient.Track singleTrack in response.artisttracks.track)
+            LastFMResponse_ArtistTracks userTracks = LastFMAPIClient.SearchUserTracks(user, artistName).Result;
+            
+            var tracks = new List<LastFMResponse_ArtistTracks.Track>();
+            foreach (LastFMResponse_ArtistTracks.Track singleTrack in userTracks.artisttracks.track)
             {
-                var newTrack = new Database.Track();
-
-                newTrack.Name = singleTrack.name;
-                newTrack.LastListenedUTS = Int32.Parse(singleTrack.date.uts);
-                newTrack.ListenedState = true;
-               
-                tracks.Add(newTrack);               
+                // Filling in potentially missing album name
+                if (String.IsNullOrEmpty(singleTrack.album.text))
+                {
+                    LastFMResponse_AlbumGetInfo albumInfo = LastFMAPIClient.AlbumGetInfo(singleTrack.album).Result;
+                    singleTrack.album.text = albumInfo.rootObject.album.name;
+                }
+                
+                tracks.Add(singleTrack);               
             }
             return tracks;
         }
 
-        
     }
 }

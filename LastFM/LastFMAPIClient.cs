@@ -8,35 +8,77 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.IO;
 
-namespace LastFM
+namespace MusicLog.LastFM
 {
-    public class LastFMAPIClient
+    public static class LastFMAPIClient
     {
-        public static async Task<LastFMResponse> SearchUserTracks(string user, string artistName)
+        public async static Task<LastFMResponse_ArtistTracks> SearchUserTracks(string user, string artistName)
         {
-            string apiUrl = "http://ws.audioscrobbler.com/2.0/?method=user.getArtistTracks";
-            string param1 = "&user=" + user;
-            string param2 = "&artist=" + artistName;
-            string apiKey = "&api_key=" + File.ReadLines("clientinfo.txt").Skip(2).Take(1).First();
-            string apiFormat = "&format=json";
+            string url = "http://ws.audioscrobbler.com/2.0/?method=user.getArtistTracks"
+                            + "&user=" + user
+                            + "&artist=" + artistName
+                            + GetUserAPIKey()
+                            + "&format=json";
 
+            string result = await CallClient(url);
+            if (CallClient(url) != null)
+            {
+                var rootResult = JsonConvert.DeserializeObject<LastFMResponse_ArtistTracks>(result);
+                return rootResult;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async static Task<LastFMResponse_AlbumGetInfo> AlbumGetInfo(LastFMResponse_ArtistTracks.Album album)
+        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=album.getInfo"
+                            + "&format = json";
+            if (!string.IsNullOrEmpty(album.text)) 
+            {
+                url += "&album=" + album.text;
+            }
+            if (!string.IsNullOrEmpty(album.mbid))
+            {
+                url += "&mbid=" + album.mbid;
+            }
+
+            string result = await CallClient(url);
+            if (CallClient(url) != null)
+            {
+                var rootResult = JsonConvert.DeserializeObject<LastFMResponse_AlbumGetInfo>(result);
+                return rootResult;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private async static Task<String> CallClient(string url)
+        {
             using (var client = new HttpClient())
             {
-                
-                string url = apiUrl + param1 + param2 + apiKey + apiFormat;
-
                 HttpResponseMessage response = client.GetAsync(url).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();
-                    var rootResult = JsonConvert.DeserializeObject<LastFMResponse>(result);
-                    return rootResult;
+                    return result;
                 }
                 else
                 {
                     return null;
                 }
             }
+        }
+
+
+        private static string GetUserAPIKey()
+        {
+            string apiKey = "&api_key=" + File.ReadLines("clientinfo.txt").Skip(2).Take(1).First();
+            return apiKey;
         }
 
         private static string ConvertSpaceToAddSign(string input)
@@ -53,57 +95,10 @@ namespace LastFM
             return output;
 
         }
+
         private static readonly HttpClient client = new HttpClient();
 
-        public class LastFMResponse
-        {
-            public Artisttracks artisttracks { get; set; }
-        }
-        public class Artisttracks
-        {
-            public Track[] track { get; set; }
-            public Attr attr { get; set; }
-        }
-        public class Attr
-        {
-            public string user { get; set; }
-            public string artist { get; set; }
-            public string page { get; set; }
-            public string perPage { get; set; }
-            public string totalPages { get; set; }
-            public string total { get; set; }
-        }
-        public class Track
-        {
-            public Artist artist { get; set; }
-            public string name { get; set; }
-            public string streamable { get; set; }
-            public string mbid { get; set; }
-            public Album album { get; set; }
-            public string url { get; set; }
-            public Image[] image { get; set; }
-            public Date date { get; set; }
-        }
-        public class Artist
-        {
-            public string text { get; set; }
-            public string mbid { get; set; }
-        }
-        public class Album
-        {
-            public string text { get; set; }
-            public string mbid { get; set; }
-        }
-        public class Date
-        {
-            public string uts { get; set; }
-            public string text { get; set; }
-        }
-        public class Image
-        {
-            public string text { get; set; }
-            public string size { get; set; }
-        }
+        
     }
 
     
