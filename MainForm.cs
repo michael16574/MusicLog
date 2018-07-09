@@ -13,12 +13,15 @@ namespace MusicLog
 {
     public partial class MainForm : Form
     {
+        private SpotifyAPI.Web.SpotifyWebAPI _spotifyAuth;
         private Database.DatabaseInstance _database;
+        
 
         public MainForm()
         {
             InitializeComponent();
             LoadDatabase();
+            LoadSpotifyAuth();
         }
 
         private void LoadDatabase()
@@ -33,6 +36,11 @@ namespace MusicLog
             }
         }
 
+        private void LoadSpotifyAuth()
+        {
+            _spotifyAuth = Spotify.SpotifyUtilities.GetAuthObj();
+        }
+
         private void Input_Click(object sender, EventArgs e)
         {
             if (!InputPanel.Controls.Contains(InputModule.Instance))
@@ -40,7 +48,8 @@ namespace MusicLog
                 InputPanel.Controls.Add(InputModule.Instance);
                 InputModule.Instance.Dock = DockStyle.Fill;
                 InputModule.Instance.BringToFront();
-                InputModule.Instance.UpdateDatabase(_database);
+                InputModule.Instance.UpdateSpotifyAuth(_spotifyAuth);
+                InputModule.Instance.UpdateDatabase(_database);               
             }
             else
             {
@@ -60,6 +69,7 @@ namespace MusicLog
                 InputPanel.Controls.Add(DatabaseModule.Instance);
                 DatabaseModule.Instance.Dock = DockStyle.Fill;
                 DatabaseModule.Instance.BringToFront();
+                DatabaseModule.Instance.UpdateSpotifyAuth(_spotifyAuth);
                 DatabaseModule.Instance.UpdateDatabase(_database);
                 DatabaseModule.Instance.PopulateArtistList();
             }

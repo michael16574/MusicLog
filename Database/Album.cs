@@ -24,6 +24,25 @@ namespace MusicLog.Database
             return Name;
         }
 
+        public void UpdateHistory(int uts)
+        {
+            foreach (Track track in Tracks)
+            {
+                track.UpdateHistory(uts);
+            }           
+        }
+
+        public void UpdateHistory(DateTime time)
+        {
+            var dateTimeOffset = new DateTimeOffset(time);
+            int uts = (int)dateTimeOffset.ToUnixTimeSeconds();
+
+            foreach (Track track in Tracks)
+            {
+                track.UpdateHistory(uts);
+            }
+        }
+
         public string Name;
         public string Id;
         public bool Tracked;

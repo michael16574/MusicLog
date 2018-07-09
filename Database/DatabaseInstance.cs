@@ -71,6 +71,7 @@ namespace MusicLog.Database
             Artists.AddRange(uniqueArtists);           
         }
 
+
         public void RemoveArtist(Artist artist)
         {
             if (Artists.Contains(artist))
@@ -102,9 +103,11 @@ namespace MusicLog.Database
 
             if (activeArtist != null)
             {
-                activeArtist.Albums.Add(NewAlbum);
-            }
-           
+                if (!activeArtist.Existance(NewAlbum))
+                {
+                    activeArtist.Albums.Add(NewAlbum);
+                }             
+            }          
         }
         public void AddAlbums(List<Album> albums, string artistName, string artistId)
         {
@@ -112,7 +115,26 @@ namespace MusicLog.Database
 
             if (activeArtist != null)
             {
-                activeArtist.Albums.AddRange(albums);
+                foreach(Album album in albums)
+                {
+                    if (!activeArtist.Existance(album))
+                    {
+                        activeArtist.Albums.Add(album);
+                    }
+                }
+            }
+        }
+        public void AddAlbums(List<Album> albums, Artist artist)
+        {
+            if (artist != null)
+            {
+                foreach (Album album in albums)
+                {
+                    if (!artist.Existance(album))
+                    {
+                        artist.Albums.Add(album);
+                    }
+                }
             }
         }
 

@@ -20,6 +20,17 @@ namespace MusicLog.Database
         public override string ToString()
         {
             return Name;
+        }    
+
+        public void UpdateHistory(int uts)
+        {
+            LastListenedUTS = uts;
+        }
+
+        public void UpdateHistory(DateTime time)
+        {
+            var dateTimeOffset = new DateTimeOffset(time);
+            LastListenedUTS = (int)dateTimeOffset.ToUnixTimeSeconds();
         }
 
         public string Name;

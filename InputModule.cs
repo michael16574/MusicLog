@@ -15,7 +15,7 @@ namespace MusicLog
     public partial class InputModule : UserControl
     {
         private static InputModule _instance;
-        private SpotifyAPI.Web.SpotifyWebAPI _authObj;
+        private SpotifyAPI.Web.SpotifyWebAPI _spotifyAuth;
         private Database.DatabaseInstance _database;
 
         public static InputModule Instance
@@ -42,6 +42,11 @@ namespace MusicLog
             _database = database;
         }
 
+        public void UpdateSpotifyAuth(SpotifyAPI.Web.SpotifyWebAPI auth)
+        {
+            _spotifyAuth = auth;
+        }
+
         private void InputModule_Load(object sender, EventArgs e)
         {
 
@@ -56,13 +61,13 @@ namespace MusicLog
         {
             
             string query = textBox1.Text;
-            _authObj = SpotifyUtilities.GetAuthObj();
+            _spotifyAuth = SpotifyUtilities.GetAuthObj();
 
             // Populating list of artists
-            List<Database.Artist> artists = SpotifyUtilities.GetArtists(query, _authObj);
+            List<Database.Artist> artists = SpotifyUtilities.GetArtists(query, _spotifyAuth);
             foreach (Database.Artist artist in artists)
             {
-                artist.Albums = SpotifyUtilities.GetAlbums(artist, _authObj);
+                artist.Albums = SpotifyUtilities.GetAlbums(artist, _spotifyAuth);
                 if (artist.Albums.Count == 0)
                 {
                     continue;
@@ -105,13 +110,13 @@ namespace MusicLog
             
             foreach(Database.Artist artist in checkedArtists)
             {
-                artist.Albums = SpotifyUtilities.GetAlbums(artist, _authObj);
+                artist.Albums = SpotifyUtilities.GetAlbums(artist, _spotifyAuth);
             }
 
             var allAlbums = checkedArtists.SelectMany(a => a.Albums).ToList();
             foreach(Database.Album album in allAlbums)
             {
-                album.Tracks = SpotifyUtilities.GetTracks(album, _authObj);
+                album.Tracks = SpotifyUtilities.GetTracks(album, _spotifyAuth);
             }
 
             _database.AddArtists(checkedArtists);

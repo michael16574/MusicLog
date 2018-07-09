@@ -23,6 +23,19 @@ namespace MusicLog.Database
         {
             return Name;
         }
+
+        public bool Existance(Album album)
+        {
+            foreach (Album dbAlbum in Albums)
+            {
+                if (album.Name == dbAlbum.Name && album.Id == dbAlbum.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public string Name;
         public string Id;
         public List<Album> Albums;
