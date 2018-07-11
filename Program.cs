@@ -27,14 +27,14 @@ namespace MusicLog
             {
                 var newArtist = new Database.Artist();
                 newArtist.Name = "Sample_Artist #" + i.ToString();
-                newArtist.Id = i.ToString();
+                newArtist.SpotifyID = i.ToString();
 
                 var albums = new List<Database.Album>();
                 for (int j = 0; j < 5; j++)
                 {
                     var newAlbum = new Database.Album();
                     newAlbum.Name = "Sample_Album #" + j.ToString();
-                    newAlbum.Id = j.ToString();
+                    newAlbum.SpotifyID = j.ToString();
 
                     var songs = new List<Database.Track>();
                     for (int k = 0; k < 15; k++)
@@ -55,9 +55,9 @@ namespace MusicLog
 
 
 
-            activeDatabase.SerializeDatabase("database.xml");
+            activeDatabase.Save("database.xml");
 
-            activeDatabase.DeserializeDatabase("database.xml");
+            activeDatabase.Load("database.xml");
         }
     }
 

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MusicLog.Spotify;
 using SpotifyAPI;
 
 namespace MusicLog
@@ -54,27 +53,27 @@ namespace MusicLog
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void search_Click(object sender, EventArgs e)
         {
             
             string query = textBox1.Text;
-            _spotifyAuth = SpotifyUtilities.GetAuthObj();
+            _spotifyAuth = WebApi.Spotify.SpotifyApi.GetAuthObj();
 
             // Populating list of artists
-            List<Database.Artist> artists = SpotifyUtilities.GetArtists(query, _spotifyAuth);
+            List<Database.Artist> artists = WebApi.Spotify.SpotifyApi.GetArtists(query, _spotifyAuth);
             foreach (Database.Artist artist in artists)
             {
-                artist.Albums = SpotifyUtilities.GetAlbums(artist, _spotifyAuth);
+                artist.Albums = WebApi.Spotify.SpotifyApi.GetAlbums(artist, _spotifyAuth);
                 if (artist.Albums.Count == 0)
                 {
                     continue;
                 }
 
                 TreeNode treeNode = new TreeNode(artist.Name);
-                treeNode.Tag = artist.Id;
+                treeNode.Tag = artist.SpotifyID;
 
                 treeView1.Nodes.Add(treeNode);
             }
@@ -103,24 +102,24 @@ namespace MusicLog
                 {
                     var newArtist = new Database.Artist();
                     newArtist.Name = node.Text;
-                    newArtist.Id = (string)node.Tag;
+                    newArtist.SpotifyID = (string)node.Tag;
                     checkedArtists.Add(newArtist);
                 }
             }
             
             foreach(Database.Artist artist in checkedArtists)
             {
-                artist.Albums = SpotifyUtilities.GetAlbums(artist, _spotifyAuth);
+                artist.Albums = WebApi.Spotify.SpotifyApi.GetAlbums(artist, _spotifyAuth);
             }
 
             var allAlbums = checkedArtists.SelectMany(a => a.Albums).ToList();
             foreach(Database.Album album in allAlbums)
             {
-                album.Tracks = SpotifyUtilities.GetTracks(album, _spotifyAuth);
+                album.Tracks = WebApi.Spotify.SpotifyApi.GetTracks(album, _spotifyAuth);
             }
 
             _database.AddArtists(checkedArtists);
-            _database.SerializeDatabase("database.xml"); 
+            _database.Save("database.xml"); 
         }
 
         

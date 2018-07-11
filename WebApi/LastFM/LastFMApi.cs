@@ -1,18 +1,36 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.IO;
 
-namespace MusicLog.LastFM
+namespace MusicLog.WebApi.LastFM
 {
-    public static class LastFMAPIClient
+    public static class LastFMApi
     {
-        public async static Task<LastFMResponse_ArtistTracks> SearchUserTracks(string user, string artistName)
+        public static List<LastFMResponse_ArtistTracks.Track> GetUserTracks(string user, string artistName)
+        {
+            LastFMResponse_ArtistTracks userTracks = SearchUserTracks(user, artistName).Result;
+            
+            var tracks = new List<LastFMResponse_ArtistTracks.Track>();
+            foreach (LastFMResponse_ArtistTracks.Track singleTrack in userTracks.artisttracks.track)
+            {
+                // Filling in potentially missing album name
+                if (String.IsNullOrEmpty(singleTrack.album.text))
+                {
+                    LastFMResponse_AlbumGetInfo albumInfo = AlbumGetInfo(singleTrack.album).Result;
+                    singleTrack.album.text = albumInfo.rootObject.album.name;
+                }
+                
+                tracks.Add(singleTrack);               
+            }
+            return tracks;
+        }
+
+        private async static Task<LastFMResponse_ArtistTracks> SearchUserTracks(string user, string artistName)
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=user.getArtistTracks"
                             + "&user=" + user
@@ -32,11 +50,11 @@ namespace MusicLog.LastFM
             }
         }
 
-        public async static Task<LastFMResponse_AlbumGetInfo> AlbumGetInfo(LastFMResponse_ArtistTracks.Album album)
+        private async static Task<LastFMResponse_AlbumGetInfo> AlbumGetInfo(LastFMResponse_ArtistTracks.Album album)
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=album.getInfo"
                             + "&format = json";
-            if (!string.IsNullOrEmpty(album.text)) 
+            if (!string.IsNullOrEmpty(album.text))
             {
                 url += "&album=" + album.text;
             }
@@ -74,7 +92,6 @@ namespace MusicLog.LastFM
             }
         }
 
-
         private static string GetUserAPIKey()
         {
             string apiKey = "&api_key=" + File.ReadLines("clientinfo.txt").Skip(2).Take(1).First();
@@ -96,12 +113,7 @@ namespace MusicLog.LastFM
 
         }
 
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient _client = new HttpClient();
 
-        
     }
-
-    
-    
-    
 }

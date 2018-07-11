@@ -8,9 +8,9 @@ using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 
-namespace MusicLog.Spotify
+namespace MusicLog.WebApi.Spotify
 {
-    public static class SpotifyUtilities
+    public static class SpotifyApi
     {
         public static SpotifyWebAPI GetAuthObj()
         {
@@ -51,7 +51,7 @@ namespace MusicLog.Spotify
                 Database.Artist newArtist = new Database.Artist
                 {
                     Name = artist.Name,
-                    Id = artist.Id
+                    SpotifyID = artist.Id
                 };
                 artistList.Add(newArtist);
             }
@@ -73,7 +73,7 @@ namespace MusicLog.Spotify
                 Database.Album newAlbum = new Database.Album
                 {
                     Name = album.Name,
-                    Id = album.Id
+                    SpotifyID = album.Id
                 };
                 AlbumList.Add(newAlbum);
             }
@@ -82,7 +82,7 @@ namespace MusicLog.Spotify
 
         private static List<SimpleAlbum> SearchAlbums(Database.Artist ArtistObj, SpotifyWebAPI AuthObj)
         {
-            Paging<SimpleAlbum> PagingObj = AuthObj.GetArtistsAlbums(ArtistObj.Id, AlbumType.Album);
+            Paging<SimpleAlbum> PagingObj = AuthObj.GetArtistsAlbums(ArtistObj.SpotifyID, AlbumType.Album);
             List<SimpleAlbum> SimpleAlbumList = new List<SimpleAlbum>();     
             foreach (SimpleAlbum album in PagingObj.Items)
             {
@@ -135,7 +135,7 @@ namespace MusicLog.Spotify
 
         private static List<SimpleTrack> SearchTracks(Database.Album AlbumObj, SpotifyWebAPI AuthObj)
         {
-            Paging<SimpleTrack> PagingObj = AuthObj.GetAlbumTracks(AlbumObj.Id, 50);
+            Paging<SimpleTrack> PagingObj = AuthObj.GetAlbumTracks(AlbumObj.SpotifyID, 50);
             List<SimpleTrack> SimpleTrackList = new List<SimpleTrack>();
             foreach (SimpleTrack track in PagingObj.Items)
             {

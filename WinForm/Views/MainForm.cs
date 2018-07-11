@@ -38,7 +38,7 @@ namespace MusicLog
 
         private void LoadSpotifyAuth()
         {
-            _spotifyAuth = Spotify.SpotifyUtilities.GetAuthObj();
+            _spotifyAuth = WebApi.Spotify.SpotifyApi.GetAuthObj();
         }
 
         private void Input_Click(object sender, EventArgs e)

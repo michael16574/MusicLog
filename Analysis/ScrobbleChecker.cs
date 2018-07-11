@@ -24,7 +24,7 @@ namespace MusicLog.Analysis
                 return;
             }
 
-            List<LastFM.LastFMResponse_ArtistTracks.Track> tracksNonUnique = LastFM.LastFMUtilities.GetUserTracks("eriejar", artist.Name);
+            List<WebApi.LastFM.LastFMResponse_ArtistTracks.Track> tracksNonUnique = WebApi.LastFM.LastFMApi.GetUserTracks("eriejar", artist.Name);
             var tracks = tracksNonUnique.GroupBy(t => new { t.name, t.album.text })
                                         .Select(t => t.First())
                                         .ToList();

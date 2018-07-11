@@ -16,13 +16,16 @@ DONE 10) User needs to retrieve missing albums from artist
 
 Refactoring:
 
-
+A) Artist, Album, Track GUID Implementation
+B) Facade, Interface Implementation
+C) MVC Implementation
 
 Additional Features:
 A) History Page - All listens ordered
 B) Playlists - Auto-spotify playlist making with selected albums
 C) Upcoming Organizer - Add albums to orderable list which user will be listening to
 D) Home Page - Upcoming albums laid out
+E) Database Upgrade - SQL
 E) Graphical Upgrade - ASP.NET / WPF
 
 

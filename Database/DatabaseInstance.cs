@@ -13,46 +13,48 @@ namespace MusicLog.Database
     /// Contains database and methods pertaining to modification of such.
     /// </summary>
     public class DatabaseInstance
-    { 
+    {
+        public List<Artist> Artists;
+        private XmlHandler _xmlHandler;
+        private MusicObjectTable _database;
+        
+
         public DatabaseInstance()
         {
             Artists = new List<Artist>();
+            this._xmlHandler = new XmlHandler();
+            this._database = new MusicObjectTable();            
         }
         public DatabaseInstance(string location)
         {
-            DeserializeDatabase(location);
+            this._xmlHandler = new XmlHandler();
+            this._database = _xmlHandler.Deserialize(location);
         }
 
-        public void SerializeDatabase(string fileName)
+        public void Save(string fileName)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(List<Artist>));
-            TextWriter writer = new StreamWriter(fileName);            
-            ser.Serialize(writer, Artists);
-            writer.Close();
-        }       
-        public void DeserializeDatabase(string filePath)
+            _xmlHandler.Serialize(_database, fileName);
+        }
+        
+        public void Load(string filePath)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(List<Artist>));
-            StreamReader reader = new StreamReader(filePath);
-            Artists = (List<Artist>)ser.Deserialize(reader);
-            reader.Close();
+            this._database = _xmlHandler.Deserialize(filePath);
         }
 
-        public void AddArtist(string name, string id)
+        public void AddArtist(string name, string spotifyID)
         {
-            Artist NewArtist = new Artist();
+            Artist NewArtist = new Artist(name, );
             NewArtist.Name = name;
-            NewArtist.Id = id;
+            NewArtist.SpotifyID = spotifyID;
+            NewArtist.ArtistID = Guid.NewGuid();
 
             // Checking duplicity
-            var foundArtist = DatabaseUtilities.FindArtistNode(NewArtist.Name, NewArtist.Id, Artists);
+            var foundArtist = FindArtistNode(NewArtist.Name, NewArtist.SpotifyID, Artists);
             if (foundArtist != null)
             {
                 return;
             }
-            Artists.Add(NewArtist);
-
-            
+            Artists.Add(NewArtist);           
         }
         public void AddArtists(List<Artist> artists)
         {
@@ -61,7 +63,7 @@ namespace MusicLog.Database
             // Checking duplicity
             foreach (var artist in artists)
             {
-                var foundArtist = DatabaseUtilities.FindArtistNode(artist.Name, artist.Id, Artists);
+                var foundArtist = FindArtistNode(artist.Name, artist.SpotifyID, Artists);
                 if (foundArtist != null)
                 {
                     continue;
@@ -80,12 +82,12 @@ namespace MusicLog.Database
             }
             else
             {
-                RemoveArtist(artist.Name, artist.Id);
+                RemoveArtist(artist.Name, artist.SpotifyID);
             }
         }
         public void RemoveArtist(string name, string id)
         {
-            Artist activeArtist = DatabaseUtilities.FindArtistNode(name, id, Artists);
+            Artist activeArtist = FindArtistNode(name, id, Artists);
 
             if (activeArtist != null)
             {
@@ -97,9 +99,9 @@ namespace MusicLog.Database
         {
             Album NewAlbum = new Album();
             NewAlbum.Name = albumName;
-            NewAlbum.Id = albumId;
+            NewAlbum.SpotifyID = albumId;
 
-            Artist activeArtist = DatabaseUtilities.FindArtistNode(artistName, artistId, Artists);
+            Artist activeArtist = FindArtistNode(artistName, artistId, Artists);
 
             if (activeArtist != null)
             {
@@ -111,7 +113,7 @@ namespace MusicLog.Database
         }
         public void AddAlbums(List<Album> albums, string artistName, string artistId)
         {
-            Artist activeArtist = DatabaseUtilities.FindArtistNode(artistName, artistId, Artists);
+            Artist activeArtist = FindArtistNode(artistName, artistId, Artists);
 
             if (activeArtist != null)
             {
@@ -140,7 +142,7 @@ namespace MusicLog.Database
 
         public void RemoveAlbum(string albumName, string albumId, string artistName, string artistId)
         {
-            DatabaseUtilities.AlbumNode activeAlbum = DatabaseUtilities.FindAlbumNode(albumName, albumId, artistName, artistId, Artists);
+            AlbumNode activeAlbum = FindAlbumNode(albumName, albumId, artistName, artistId, Artists);
 
             if (activeAlbum.albumNode != null)
             {
@@ -158,13 +160,13 @@ namespace MusicLog.Database
 
         public void AddTracks(List<Track> tracks, string albumName, string albumId, string artistName, string artistId)
         {
-            DatabaseUtilities.AlbumNode activeAlbum = DatabaseUtilities.FindAlbumNode(albumName, albumId, artistName, artistId, Artists);            
+            AlbumNode activeAlbum = FindAlbumNode(albumName, albumId, artistName, artistId, Artists);            
 
             activeAlbum.albumNode.Tracks.AddRange(tracks);               
         }
         public void RemoveTrack(string trackName, string albumName, string albumId, string artistName, string artistId)
         {
-            DatabaseUtilities.TrackNode activeTrack = DatabaseUtilities.FindTrackNode(trackName, albumName, albumId, artistName, artistId, Artists);
+            TrackNode activeTrack = FindTrackNode(trackName, albumName, albumId, artistName, artistId, Artists);
 
             if (activeTrack.trackNode != null)
             {
@@ -178,7 +180,53 @@ namespace MusicLog.Database
         }
 
 
-        public List<Artist> Artists;
+        
+
+        private static Artist FindArtistNode(string name, string id, List<Artist> artists)
+        {
+            Artist activeArtist = null;
+            try
+            {
+                activeArtist = artists.First(a => a.Name == name && a.SpotifyID == id);
+            }
+            catch (System.InvalidOperationException)
+            {
+                return null;
+            }
+            return activeArtist;
+        }
+
+        private static AlbumNode FindAlbumNode(string albumName, string albumId, string artistName, string artistId, List<Artist> artists)
+        {
+            AlbumNode albumStruct = new AlbumNode();
+            albumStruct.artistNode = artists.First(a => a.Name == artistName && a.SpotifyID == artistId);
+            albumStruct.albumNode = albumStruct.artistNode.Albums.First(a => a.Name == albumName && a.SpotifyID == albumId);
+            return albumStruct;
+        }
+
+        private static TrackNode FindTrackNode(string trackName, string albumName, string albumId, string artistName, string artistId, List<Artist> artists)
+        {
+            TrackNode trackStruct = new TrackNode();
+            trackStruct.artistNode = artists.First(a => a.Name == artistName && a.SpotifyID == artistId);
+            trackStruct.albumNode = trackStruct.artistNode.Albums.First(a => a.Name == albumName && a.SpotifyID == albumId);
+            trackStruct.trackNode = trackStruct.albumNode.Tracks.First(t => t.Name == trackName);
+            return trackStruct;
+        }
+
+  
+
+        public struct AlbumNode
+        {
+            public Artist artistNode;
+            public Album albumNode;
+        }
+
+        public struct TrackNode
+        {
+            public Artist artistNode;
+            public Album albumNode;
+            public Track trackNode;
+        }
     }
 
    

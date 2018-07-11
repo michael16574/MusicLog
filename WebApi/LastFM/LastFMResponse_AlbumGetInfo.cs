@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicLog.LastFM
+namespace MusicLog.WebApi.LastFM
 {
     public class LastFMResponse_AlbumGetInfo
     {
@@ -14,7 +14,6 @@ namespace MusicLog.LastFM
         {
             public Album album { get; set; }
         }
-
         public class Album
         {
             public string name { get; set; }
@@ -28,12 +27,10 @@ namespace MusicLog.LastFM
             public Tags tags { get; set; }
             public Wiki wiki { get; set; }
         }
-
         public class Tracks
         {
             public Track[] track { get; set; }
         }
-
         public class Track
         {
             public string name { get; set; }
@@ -43,48 +40,40 @@ namespace MusicLog.LastFM
             public Streamable streamable { get; set; }
             public Artist artist { get; set; }
         }
-
         public class Attr
         {
             public string rank { get; set; }
         }
-
         public class Streamable
         {
             public string text { get; set; }
             public string fulltrack { get; set; }
         }
-
         public class Artist
         {
             public string name { get; set; }
             public string mbid { get; set; }
             public string url { get; set; }
         }
-
         public class Tags
         {
             public Tag[] tag { get; set; }
         }
-
         public class Tag
         {
             public string name { get; set; }
             public string url { get; set; }
         }
-
         public class Wiki
         {
             public string published { get; set; }
             public string summary { get; set; }
             public string content { get; set; }
         }
-
         public class Image
         {
             public string text { get; set; }
             public string size { get; set; }
         }
-
     }
 }
