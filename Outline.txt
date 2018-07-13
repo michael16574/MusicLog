@@ -26,7 +26,7 @@ B) Playlists - Auto-spotify playlist making with selected albums
 C) Upcoming Organizer - Add albums to orderable list which user will be listening to
 D) Home Page - Upcoming albums laid out
 E) Database Upgrade - SQL
-E) Graphical Upgrade - ASP.NET / WPF
+F) GUI Upgrade - ASP.NET / WPF
 
 
 Macroscopic Outline:

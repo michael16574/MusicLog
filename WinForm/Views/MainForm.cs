@@ -13,32 +13,13 @@ namespace MusicLog
 {
     public partial class MainForm : Form
     {
-        private SpotifyAPI.Web.SpotifyWebAPI _spotifyAuth;
-        private Database.DatabaseInstance _database;
+        private MusicLogApi _musicLog;
         
 
-        public MainForm()
+        public MainForm(MusicLogApi musicLog)
         {
             InitializeComponent();
-            LoadDatabase();
-            LoadSpotifyAuth();
-        }
-
-        private void LoadDatabase()
-        {
-            if (File.Exists("database.xml"))
-            {
-                _database = new Database.DatabaseInstance("database.xml");
-            }
-            else
-            {
-                _database = new Database.DatabaseInstance();
-            }
-        }
-
-        private void LoadSpotifyAuth()
-        {
-            _spotifyAuth = WebApi.Spotify.SpotifyApi.GetAuthObj();
+            _musicLog = musicLog;
         }
 
         private void Input_Click(object sender, EventArgs e)
@@ -48,8 +29,7 @@ namespace MusicLog
                 InputPanel.Controls.Add(InputModule.Instance);
                 InputModule.Instance.Dock = DockStyle.Fill;
                 InputModule.Instance.BringToFront();
-                InputModule.Instance.UpdateSpotifyAuth(_spotifyAuth);
-                InputModule.Instance.UpdateDatabase(_database);               
+                InputModule.Instance.UpdateMusicLog(_musicLog);              
             }
             else
             {
@@ -69,8 +49,7 @@ namespace MusicLog
                 InputPanel.Controls.Add(DatabaseModule.Instance);
                 DatabaseModule.Instance.Dock = DockStyle.Fill;
                 DatabaseModule.Instance.BringToFront();
-                DatabaseModule.Instance.UpdateSpotifyAuth(_spotifyAuth);
-                DatabaseModule.Instance.UpdateDatabase(_database);
+                DatabaseModule.Instance.UpdateMusicLog(_musicLog);
                 DatabaseModule.Instance.PopulateArtistList();
             }
             else
@@ -86,7 +65,7 @@ namespace MusicLog
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Analysis.ScrobbleChecker.UpdateAllArtists(_database);
+            _musicLog.UpdateAllArtists();
         }
     }
 }

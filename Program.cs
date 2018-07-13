@@ -13,51 +13,18 @@ namespace MusicLog
         [STAThread]
         static void Main(string[] args)
         {
+            var settings = new UserSettings();
+
+            settings.Creds.SpotifyUser = "eriejar";
+            settings.Creds.SpotifyID = "86a63babc6bd4c84a6d49bd42ceec7b7";
+            settings.Creds.SpotifySecret = "1b7a620bd2504a79866398e4f2aadaff";
+            settings.Creds.LastFMUser = "eriejar";
+            settings.Creds.LastFMKey = "dc1c134531fc3eaa8ba716cc71fdcde9";
+
+            var musicLogProgram = new MusicLogApi(settings);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
-        }
-
-        static void CreateSampleDatabase()
-        {
-            Database.DatabaseInstance activeDatabase = new Database.DatabaseInstance();
-
-            var artists = new List<Database.Artist>();
-            for (int i = 0; i < 100; i++)
-            {
-                var newArtist = new Database.Artist();
-                newArtist.Name = "Sample_Artist #" + i.ToString();
-                newArtist.SpotifyID = i.ToString();
-
-                var albums = new List<Database.Album>();
-                for (int j = 0; j < 5; j++)
-                {
-                    var newAlbum = new Database.Album();
-                    newAlbum.Name = "Sample_Album #" + j.ToString();
-                    newAlbum.SpotifyID = j.ToString();
-
-                    var songs = new List<Database.Track>();
-                    for (int k = 0; k < 15; k++)
-                    {
-                        var NewTrack = new Database.Track("Sample_Track #" + k);
-                        songs.Add(NewTrack);
-                    }
-                    newAlbum.Tracks.AddRange(songs);
-
-                    albums.Add(newAlbum);
-                }
-                newArtist.Albums.AddRange(albums);
-
-                artists.Add(newArtist);
-            }
-            activeDatabase.AddArtists(artists);
-
-
-
-
-            activeDatabase.Save("database.xml");
-
-            activeDatabase.Load("database.xml");
+            Application.Run(new MainForm(musicLogProgram));
         }
     }
 

@@ -7,13 +7,13 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicLog.WebApi.LastFM
+namespace MusicLog
 {
     public static class LastFMApi
     {
-        public static List<LastFMResponse_ArtistTracks.Track> GetUserTracks(string user, string artistName)
+        public static List<LastFMResponse_ArtistTracks.Track> GetUserTracks(string artistName, string user, string apiKey)
         {
-            LastFMResponse_ArtistTracks userTracks = SearchUserTracks(user, artistName).Result;
+            LastFMResponse_ArtistTracks userTracks = SearchUserTracks(artistName, user, apiKey).Result;
             
             var tracks = new List<LastFMResponse_ArtistTracks.Track>();
             foreach (LastFMResponse_ArtistTracks.Track singleTrack in userTracks.artisttracks.track)
@@ -21,7 +21,7 @@ namespace MusicLog.WebApi.LastFM
                 // Filling in potentially missing album name
                 if (String.IsNullOrEmpty(singleTrack.album.text))
                 {
-                    LastFMResponse_AlbumGetInfo albumInfo = AlbumGetInfo(singleTrack.album).Result;
+                    LastFMResponse_AlbumGetInfo albumInfo = AlbumGetInfo(singleTrack.album, apiKey).Result;
                     singleTrack.album.text = albumInfo.rootObject.album.name;
                 }
                 
@@ -30,16 +30,16 @@ namespace MusicLog.WebApi.LastFM
             return tracks;
         }
 
-        private async static Task<LastFMResponse_ArtistTracks> SearchUserTracks(string user, string artistName)
+        private async static Task<LastFMResponse_ArtistTracks> SearchUserTracks(string artistName, string user, string apiKey)
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=user.getArtistTracks"
                             + "&user=" + user
                             + "&artist=" + artistName
-                            + GetUserAPIKey()
+                            + "&api_key=" + apiKey
                             + "&format=json";
 
             string result = await CallClient(url);
-            if (CallClient(url) != null)
+            if (result != null)
             {
                 var rootResult = JsonConvert.DeserializeObject<LastFMResponse_ArtistTracks>(result);
                 return rootResult;
@@ -50,10 +50,11 @@ namespace MusicLog.WebApi.LastFM
             }
         }
 
-        private async static Task<LastFMResponse_AlbumGetInfo> AlbumGetInfo(LastFMResponse_ArtistTracks.Album album)
+        private async static Task<LastFMResponse_AlbumGetInfo> AlbumGetInfo(LastFMResponse_ArtistTracks.Album album, string apiKey)
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=album.getInfo"
-                            + "&format = json";
+                            + "&api_key=" + apiKey
+                            + "&format=json";
             if (!string.IsNullOrEmpty(album.text))
             {
                 url += "&album=" + album.text;
@@ -90,12 +91,6 @@ namespace MusicLog.WebApi.LastFM
                     return null;
                 }
             }
-        }
-
-        private static string GetUserAPIKey()
-        {
-            string apiKey = "&api_key=" + File.ReadLines("clientinfo.txt").Skip(2).Take(1).First();
-            return apiKey;
         }
 
         private static string ConvertSpaceToAddSign(string input)

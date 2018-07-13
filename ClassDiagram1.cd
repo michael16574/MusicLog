@@ -7,47 +7,26 @@
       <FileName>Analysis\ScrobbleChecker.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MusicLog.Database.Album">
+  <Class Name="MusicLog.Database.Artist">
     <Position X="4.5" Y="8.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAACAEAAAAAEAACAABQAAAAEAAAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAABQAAAAAAAAAAAAAABAAAAA=</HashCode>
       <FileName>Database\IMusicObject.cs</FileName>
       <NewMemberFileName>Database\Album.cs</NewMemberFileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="MusicLog.Database.Artist">
-    <Position X="2.25" Y="8.25" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAEAAAAABQAAAAAAAAAAIAACBAAAAA=</HashCode>
-      <FileName>Database\IMusicObject.cs</FileName>
-      <NewMemberFileName>Database\Artist.cs</NewMemberFileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="MusicLog.Database.DatabaseInstance">
     <Position X="3" Y="1.25" Width="2.25" />
-    <NestedTypes>
-      <Struct Name="MusicLog.Database.DatabaseInstance.AlbumNode" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Database\DatabaseInstance.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="MusicLog.Database.DatabaseInstance.TrackNode" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Database\DatabaseInstance.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AgABgIIQAAAACAAAABAAgAAAFABAAAQAAEAAAAiAAAg=</HashCode>
+      <HashCode>AAABgIIQAAAACAAAABBEgAAAECBAAIQAAAAAAAggAAg=</HashCode>
       <FileName>Database\DatabaseInstance.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MusicLog.Database.Track">
     <Position X="6.75" Y="8.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAACAAAAAAAEAACAABQAQAAAAgAAAAAAABAAAAA=</HashCode>
+      <HashCode>AAAAAAACAAAAAAAEAACAABQAQAAAAgAABAAAABAAAAA=</HashCode>
       <FileName>Database\IMusicObject.cs</FileName>
       <NewMemberFileName>Database\Track.cs</NewMemberFileName>
     </TypeIdentifier>

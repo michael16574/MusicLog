@@ -210,10 +210,6 @@
             this.deleteArtistToolStripMenuItem.Text = "Delete Artist";
             this.deleteArtistToolStripMenuItem.Click += new System.EventHandler(this.DeleteArtist_ToolStripMenuItem_Click);
             // 
-            // databaseInstanceBindingSource
-            // 
-            this.databaseInstanceBindingSource.DataSource = typeof(MusicLog.Database.DatabaseInstance);
-            // 
             // DatabaseModule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);

@@ -13,8 +13,7 @@ namespace MusicLog
     public partial class DatabaseModule : UserControl
     {
         private static DatabaseModule _instance;
-        private SpotifyAPI.Web.SpotifyWebAPI _spotifyAuth;
-        private Database.DatabaseInstance _database;
+        private MusicLogApi _musicLog;
 
         public static DatabaseModule Instance
         {
@@ -28,14 +27,9 @@ namespace MusicLog
             }
         }
 
-        public void UpdateDatabase(Database.DatabaseInstance database)
+        public void UpdateMusicLog(MusicLogApi musicLog)
         {
-            _database = database;
-        }
-
-        public void UpdateSpotifyAuth(SpotifyAPI.Web.SpotifyWebAPI auth)
-        {
-            _spotifyAuth = auth;
+            _musicLog = musicLog;
         }
 
 
@@ -61,7 +55,7 @@ namespace MusicLog
             }
 
             // Adding artists (EXTRACT)
-            foreach (var artist in _database.Artists)
+            foreach (var artist in _musicLog.GetArtists())
             {
                 var newItm = new ListViewItem(artist.Name);
                 newItm.Tag = artist;
@@ -83,12 +77,11 @@ namespace MusicLog
 
             // Retrieving album information
             ListViewItem lstViewItem = ArtistListView.FocusedItem;
-            var selectedArtist = lstViewItem.Tag as Database.Artist;
+            var selectedArtist = lstViewItem.Tag as Artist;
 
             string tickMark = "\u2713";
-            foreach (var album in selectedArtist.Albums)
+            foreach (var album in _musicLog.GetAlbums(selectedArtist))
             {
-
                 var newItm = new ListViewItem(album.Name);
                 newItm.Tag = album;
                 if (album.Tracked)
@@ -118,9 +111,9 @@ namespace MusicLog
 
             // Retrieving track information
             ListViewItem lstViewItem = AlbumListView.FocusedItem;
-            var selectedAlbum = lstViewItem.Tag as Database.Album;
+            var selectedAlbum = lstViewItem.Tag as Album;
 
-            foreach (var track in selectedAlbum.Tracks)
+            foreach (var track in _musicLog.GetTracks(selectedAlbum))
             {
                 string time = GetTimeFromUnix(track.LastListenedUTS);
 
@@ -136,9 +129,12 @@ namespace MusicLog
 
         private void TrackSelectedButton_Click(object sender, EventArgs e)
         {
-            var selectedAlbums = new List<Database.Album>();
-            selectedAlbums.Add((Database.Album)AlbumListView.FocusedItem.Tag);
-            _database.TrackAlbums(selectedAlbums);
+            var selectedAlbums = new List<Album>();
+            selectedAlbums.Add((Album)AlbumListView.FocusedItem.Tag);
+            foreach (Album album in selectedAlbums)
+            {
+                album.Tracked = true;
+            }          
 
             // Adding tickmark to newly added album in list
             string tickMark = "\u2713";
@@ -150,7 +146,7 @@ namespace MusicLog
         private void MarkTrackListened_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Updating track UTS in database
-            var selectedTrack = (Database.Track)TrackListView.SelectedItems[0].Tag;
+            var selectedTrack = (Track)TrackListView.SelectedItems[0].Tag;
             selectedTrack.UpdateHistory(DateTime.UtcNow);
 
             // Updating listview
@@ -161,8 +157,8 @@ namespace MusicLog
         private void MarkListened_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Updating track UTS in database
-            var selectedAlbum = (Database.Album)AlbumListView.SelectedItems[0].Tag;
-            selectedAlbum.UpdateHistory(DateTime.UtcNow);
+            var selectedAlbum = (Album)AlbumListView.SelectedItems[0].Tag;
+            _musicLog.UpdateHistory(DateTime.UtcNow, selectedAlbum);
 
             // Updating listview
             AlbumListView_SelectedIndexChanged(this, EventArgs.Empty);
@@ -171,7 +167,7 @@ namespace MusicLog
         private void DeleteTrack_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Updating track UTS in database
-            var selectedTrack = (Database.Track)TrackListView.SelectedItems[0].Tag;
+            var selectedTrack = (Track)TrackListView.SelectedItems[0].Tag;
             selectedTrack.UpdateHistory(0);
 
             // Updating listview
@@ -181,8 +177,8 @@ namespace MusicLog
         private void RemoveAlbumHistory_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Updating track UTS in database
-            var selectedAlbum = (Database.Album)AlbumListView.SelectedItems[0].Tag;
-            selectedAlbum.UpdateHistory(0);
+            var selectedAlbum = (Album)AlbumListView.SelectedItems[0].Tag;
+            _musicLog.UpdateHistory(0, selectedAlbum);
 
             // Updating listview
             AlbumListView_SelectedIndexChanged(this, EventArgs.Empty);
@@ -191,9 +187,8 @@ namespace MusicLog
         private void DeleteAlbum_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Removing selected album
-            var selectedArtist = (Database.Artist)ArtistListView.SelectedItems[0].Tag;
-            var selectedAlbum = (Database.Album)AlbumListView.SelectedItems[0].Tag;
-            selectedArtist.Albums.Remove(selectedAlbum);
+            var selectedAlbum = (Album)AlbumListView.SelectedItems[0].Tag;
+            _musicLog.RemoveAlbum(selectedAlbum);
 
             // Updating listview
             ArtistListView_SelectedIndexChanged(this, EventArgs.Empty);
@@ -203,8 +198,8 @@ namespace MusicLog
         private void DeleteArtist_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Removing selected artist
-            var selectedArtist = (Database.Artist)ArtistListView.SelectedItems[0].Tag;
-            _database.RemoveArtist(selectedArtist);
+            var selectedArtist = (Artist)ArtistListView.SelectedItems[0].Tag;
+            _musicLog.RemoveArtist(selectedArtist);
 
             // Updating listview
             PopulateArtistList();
@@ -249,18 +244,18 @@ namespace MusicLog
         private void RetrieveMissingAlbums_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Adding missing albums
-            var selectedArtist = (Database.Artist)ArtistListView.SelectedItems[0].Tag;
-            var retrievedAlbums = WebApi.Spotify.SpotifyApi.GetAlbums(selectedArtist, _spotifyAuth);
-            foreach (Database.Album album in retrievedAlbums)
+            var selectedArtist = (Artist)ArtistListView.SelectedItems[0].Tag;
+            var retrievedAlbums = _musicLog.GetSpotifyAlbums(selectedArtist);
+
+            _musicLog.AddAlbums(retrievedAlbums, selectedArtist);
+            foreach (Album album in retrievedAlbums)
             {
-                album.Tracks = WebApi.Spotify.SpotifyApi.GetTracks(album, _spotifyAuth);
+                _musicLog.AddTracks(_musicLog.GetSpotifyTracks(album), album);
             }
-            _database.AddAlbums(retrievedAlbums, selectedArtist);
 
             // Updating listview
             ArtistListView_SelectedIndexChanged(this, EventArgs.Empty);
             TrackListView.Items.Clear();
-
         }
 
 

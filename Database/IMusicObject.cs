@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicLog.Database
+namespace MusicLog
 {
     public interface IMusicObject
     {
@@ -19,37 +19,15 @@ namespace MusicLog.Database
         public string SpotifyID { get; set; }
         public Guid ArtistID { get; set; }
 
-        public List<Album> Albums;
-
         public Artist()
         {
-            ArtistID = Guid.NewGuid();
-            Albums = new List<Album>();          
+            ArtistID = Guid.NewGuid();       
         }
-        public Artist(string name, string id, List<Album> albums)
+        public Artist(string name, string spotifyID)
         {
             Name = name;
-            SpotifyID = id;
+            SpotifyID = spotifyID;
             ArtistID = Guid.NewGuid();
-            Albums = albums;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public bool Existance(Album album)
-        {
-            foreach (Album dbAlbum in Albums)
-            {
-                if (album.Name == dbAlbum.Name && album.SpotifyID == dbAlbum.SpotifyID)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 
@@ -61,45 +39,31 @@ namespace MusicLog.Database
 
         public Guid AlbumID;        
         public bool Tracked;
-        public List<Track> Tracks;
 
         public Album()
         {
+            ArtistID = Guid.Empty;
             AlbumID = Guid.NewGuid();
-            Tracks = new List<Track>();
             Tracked = false;
         }
         public Album(string name, string id)
         {
             Name = name;
             SpotifyID = id;
+            ArtistID = Guid.Empty;
+            AlbumID = Guid.NewGuid();
+            Tracked = false;
+        }
+        public Album(string name, string id, Guid artistID)
+        {
+            Name = name;
+            SpotifyID = id;
+            ArtistID = artistID;
             AlbumID = Guid.NewGuid();
             Tracked = false;
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public void UpdateHistory(int uts)
-        {
-            foreach (Track track in Tracks)
-            {
-                track.UpdateHistory(uts);
-            }
-        }
-
-        public void UpdateHistory(DateTime time)
-        {
-            var dateTimeOffset = new DateTimeOffset(time);
-            int uts = (int)dateTimeOffset.ToUnixTimeSeconds();
-
-            foreach (Track track in Tracks)
-            {
-                track.UpdateHistory(uts);
-            }
-        }        
+        
     }
 
     public class Track : IMusicObject
@@ -109,18 +73,40 @@ namespace MusicLog.Database
         public Guid ArtistID { get; set; }
 
         public Guid AlbumID;
+        public Guid TrackID;
+
         public int TrackNo;
         public int LastListenedUTS;
 
-        public Track() {}
-        public Track(string name)
+        public Track()
+        {
+            ArtistID = Guid.Empty;
+            AlbumID = Guid.Empty;
+            TrackID = Guid.NewGuid();
+        }
+        public Track(string name, string spotifyID)
         {
             Name = name;
+            SpotifyID = spotifyID;
+            ArtistID = Guid.Empty;
+            AlbumID = Guid.Empty;
+            TrackID = Guid.NewGuid();
         }
-
-        public override string ToString()
+        public Track(string name, string spotifyID, Guid albumID)
         {
-            return Name;
+            Name = name;
+            SpotifyID = spotifyID;
+            ArtistID = Guid.Empty;
+            AlbumID = albumID;
+            TrackID = Guid.NewGuid();
+        }
+        public Track(string name, string spotifyID, Guid albumID, Guid artistID)
+        {
+            Name = name;
+            SpotifyID = spotifyID;
+            ArtistID = artistID;
+            AlbumID = albumID;
+            TrackID = Guid.NewGuid();
         }
 
         public void UpdateHistory(int uts)
@@ -133,6 +119,5 @@ namespace MusicLog.Database
             var dateTimeOffset = new DateTimeOffset(time);
             LastListenedUTS = (int)dateTimeOffset.ToUnixTimeSeconds();
         }
-
     }
 }

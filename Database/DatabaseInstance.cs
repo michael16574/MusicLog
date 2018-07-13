@@ -7,23 +7,21 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace MusicLog.Database
+namespace MusicLog
 {
     /// <summary>
     /// Contains database and methods pertaining to modification of such.
     /// </summary>
     public class DatabaseInstance
     {
-        public List<Artist> Artists;
         private XmlHandler _xmlHandler;
         private MusicObjectTable _database;
-        
+
 
         public DatabaseInstance()
         {
-            Artists = new List<Artist>();
             this._xmlHandler = new XmlHandler();
-            this._database = new MusicObjectTable();            
+            this._database = new MusicObjectTable();
         }
         public DatabaseInstance(string location)
         {
@@ -35,118 +33,94 @@ namespace MusicLog.Database
         {
             _xmlHandler.Serialize(_database, fileName);
         }
-        
         public void Load(string filePath)
         {
             this._database = _xmlHandler.Deserialize(filePath);
         }
 
-        public void AddArtist(string name, string spotifyID)
-        {
-            Artist NewArtist = new Artist(name, );
-            NewArtist.Name = name;
-            NewArtist.SpotifyID = spotifyID;
-            NewArtist.ArtistID = Guid.NewGuid();
 
-            // Checking duplicity
-            var foundArtist = FindArtistNode(NewArtist.Name, NewArtist.SpotifyID, Artists);
-            if (foundArtist != null)
-            {
-                return;
-            }
-            Artists.Add(NewArtist);           
+        public List<Artist> GetArtists()
+        {
+            return _database.Artists;
+        }
+
+        public void AddArtist(Artist artist)
+        {
+            _database.Artists.Add(artist);
         }
         public void AddArtists(List<Artist> artists)
         {
-            List<Artist> uniqueArtists = new List<Artist>();
-
-            // Checking duplicity
-            foreach (var artist in artists)
-            {
-                var foundArtist = FindArtistNode(artist.Name, artist.SpotifyID, Artists);
-                if (foundArtist != null)
-                {
-                    continue;
-                }
-                uniqueArtists.Add(artist);
-            }
-            Artists.AddRange(uniqueArtists);           
+            _database.Artists.AddRange(artists);
         }
-
-
+        
+        public void RemoveArtist(string name, string spotifyID)
+        {
+            Artist artist = FindArtist(new Artist(name, spotifyID));
+            if (artist != null)
+            {
+                _database.Artists.Remove(artist);
+            }
+        }
         public void RemoveArtist(Artist artist)
         {
-            if (Artists.Contains(artist))
+            if (_database.Artists.Contains(artist))
             {
-                Artists.Remove(artist);
+                _database.Artists.Remove(artist);
             }
             else
             {
+                // In instance where artist is not part of database
                 RemoveArtist(artist.Name, artist.SpotifyID);
             }
         }
-        public void RemoveArtist(string name, string id)
+        public void RemoveArtists(List<Artist> artists)
         {
-            Artist activeArtist = FindArtistNode(name, id, Artists);
-
-            if (activeArtist != null)
+            foreach(var artist in artists)
             {
-                Artists.Remove(activeArtist);
+                RemoveArtist(artist);
             }
         }
 
-        public void AddAlbum(string albumName, string albumId, string artistName, string artistId)
+
+        public List<Album> GetAlbums()
         {
-            Album NewAlbum = new Album();
-            NewAlbum.Name = albumName;
-            NewAlbum.SpotifyID = albumId;
-
-            Artist activeArtist = FindArtistNode(artistName, artistId, Artists);
-
-            if (activeArtist != null)
-            {
-                if (!activeArtist.Existance(NewAlbum))
-                {
-                    activeArtist.Albums.Add(NewAlbum);
-                }             
-            }          
+            return _database.Albums;
         }
-        public void AddAlbums(List<Album> albums, string artistName, string artistId)
-        {
-            Artist activeArtist = FindArtistNode(artistName, artistId, Artists);
 
-            if (activeArtist != null)
+        public void AddAlbum(Album album)
+        {
+            _database.Albums.Add(album);
+        }
+        public void AddAlbums(List<Album> albums)
+        {
+            _database.Albums.AddRange(albums);
+        }
+
+        public void RemoveAlbum(string name, string spotifyID)
+        {
+            Album album = FindAlbum(new Album(name, spotifyID));
+            if (album != null)
             {
-                foreach(Album album in albums)
-                {
-                    if (!activeArtist.Existance(album))
-                    {
-                        activeArtist.Albums.Add(album);
-                    }
-                }
+                _database.Albums.Remove(album);
             }
         }
-        public void AddAlbums(List<Album> albums, Artist artist)
+        public void RemoveAlbum(Album album)
         {
-            if (artist != null)
+            if (_database.Albums.Contains(album))
             {
-                foreach (Album album in albums)
-                {
-                    if (!artist.Existance(album))
-                    {
-                        artist.Albums.Add(album);
-                    }
-                }
+                _database.Albums.Remove(album);
+            }
+            else
+            {
+                // In instance where album is not part of database
+                RemoveAlbum(album.Name, album.SpotifyID);
             }
         }
-
-        public void RemoveAlbum(string albumName, string albumId, string artistName, string artistId)
+        public void RemoveAlbums(List<Album> albums)
         {
-            AlbumNode activeAlbum = FindAlbumNode(albumName, albumId, artistName, artistId, Artists);
-
-            if (activeAlbum.albumNode != null)
+            foreach (var album in albums)
             {
-                activeAlbum.artistNode.Albums.Remove(activeAlbum.albumNode);
+                RemoveAlbum(album);
             }
         }
 
@@ -157,76 +131,109 @@ namespace MusicLog.Database
                 album.Tracked = true;
             }
         }
-
-        public void AddTracks(List<Track> tracks, string albumName, string albumId, string artistName, string artistId)
+        public void UntrackAlbums(List<Album> albums)
         {
-            AlbumNode activeAlbum = FindAlbumNode(albumName, albumId, artistName, artistId, Artists);            
-
-            activeAlbum.albumNode.Tracks.AddRange(tracks);               
-        }
-        public void RemoveTrack(string trackName, string albumName, string albumId, string artistName, string artistId)
-        {
-            TrackNode activeTrack = FindTrackNode(trackName, albumName, albumId, artistName, artistId, Artists);
-
-            if (activeTrack.trackNode != null)
+            foreach(var album in albums)
             {
-                activeTrack.albumNode.Tracks.Remove(activeTrack.trackNode);
+                album.Tracked = false;
             }
         }
 
-        public void ModifyDate(Track track, int uts)
+
+        public List<Track> GetTracks()
         {
-            track.LastListenedUTS = uts;
+            return _database.Tracks;
+        }
+       
+        public void AddTrack(Track track)
+        {
+            _database.Tracks.Add(track);
+        }
+        public void AddTracks(List<Track> tracks)
+        {
+            _database.Tracks.AddRange(tracks);
         }
 
+        public void RemoveTrack(string name, string spotifyID)
+        {
+            Track track = FindTrack(new Track(name, spotifyID));
+            if (track != null)
+            {
+                _database.Tracks.Remove(track);
+            }
+        }
+        public void RemoveTrack(Track track)
+        {
+            if (_database.Tracks.Contains(track))
+            {
+                _database.Tracks.Remove(track);
+            }
+            else
+            {
+                // In instance where track is not part of database
+                RemoveAlbum(track.Name, track.SpotifyID);
+            }
+        }
+        public void RemoveTracks(List<Track> tracks)
+        {
+            foreach (var track in tracks)
+            {
+                RemoveTrack(track);
+            }
+        }
 
         
 
-        private static Artist FindArtistNode(string name, string id, List<Artist> artists)
+        public Artist FindArtist(Artist artist)
         {
-            Artist activeArtist = null;
-            try
-            {
-                activeArtist = artists.First(a => a.Name == name && a.SpotifyID == id);
-            }
-            catch (System.InvalidOperationException)
-            {
-                return null;
-            }
+            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.Name == artist.Name && a.SpotifyID == artist.SpotifyID);
+            return activeArtist;
+        }
+        public Artist FindArtist(Guid artistID)
+        {
+            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.ArtistID == artistID);
             return activeArtist;
         }
 
-        private static AlbumNode FindAlbumNode(string albumName, string albumId, string artistName, string artistId, List<Artist> artists)
+        public Album FindAlbum(Album album)
         {
-            AlbumNode albumStruct = new AlbumNode();
-            albumStruct.artistNode = artists.First(a => a.Name == artistName && a.SpotifyID == artistId);
-            albumStruct.albumNode = albumStruct.artistNode.Albums.First(a => a.Name == albumName && a.SpotifyID == albumId);
-            return albumStruct;
+            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.Name == album.Name && a.SpotifyID == album.SpotifyID);
+            return activeAlbum;
+        }
+        public Album FindAlbum(Guid albumID)
+        {
+            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.AlbumID == albumID);
+            return activeAlbum;
+        }
+        public List<Album> FindAlbums(Artist artist)
+        {
+            // Finds all albums linked to artist through ArtistID
+            List<Album> albums = _database.Albums.Where(a => a.ArtistID == artist.ArtistID).ToList();
+            return albums;
         }
 
-        private static TrackNode FindTrackNode(string trackName, string albumName, string albumId, string artistName, string artistId, List<Artist> artists)
+        public Track FindTrack(Track track)
         {
-            TrackNode trackStruct = new TrackNode();
-            trackStruct.artistNode = artists.First(a => a.Name == artistName && a.SpotifyID == artistId);
-            trackStruct.albumNode = trackStruct.artistNode.Albums.First(a => a.Name == albumName && a.SpotifyID == albumId);
-            trackStruct.trackNode = trackStruct.albumNode.Tracks.First(t => t.Name == trackName);
-            return trackStruct;
+            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.Name == track.Name && t.SpotifyID == track.SpotifyID);
+            return activeTrack;
+        }
+        public Track FindTrack(Guid trackID)
+        {
+            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.TrackID == trackID);
+            return activeTrack;
+        }
+        public List<Track> FindTracks(Artist artist)
+        {
+            // Finds all tracks linked to artist through ArtistID
+            List<Track> tracks = _database.Tracks.Where(t => t.ArtistID == artist.ArtistID).ToList();
+            return tracks;
+        }
+        public List<Track> FindTracks(Album album)
+        {
+            List<Track> tracks = _database.Tracks.Where(t => t.AlbumID == album.AlbumID).ToList();
+            return tracks;
         }
 
-  
-
-        public struct AlbumNode
-        {
-            public Artist artistNode;
-            public Album albumNode;
-        }
-
-        public struct TrackNode
-        {
-            public Artist artistNode;
-            public Album albumNode;
-            public Track trackNode;
-        }
     }
 
    

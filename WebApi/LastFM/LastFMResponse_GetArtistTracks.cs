@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicLog.WebApi.LastFM
+namespace MusicLog
 {
     public class LastFMResponse_ArtistTracks
     {

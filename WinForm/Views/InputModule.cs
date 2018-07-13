@@ -14,8 +14,7 @@ namespace MusicLog
     public partial class InputModule : UserControl
     {
         private static InputModule _instance;
-        private SpotifyAPI.Web.SpotifyWebAPI _spotifyAuth;
-        private Database.DatabaseInstance _database;
+        private MusicLogApi _musicLog;
 
         public static InputModule Instance
         {
@@ -29,21 +28,14 @@ namespace MusicLog
             }
         }
 
-
-
         public InputModule()
         {
             InitializeComponent();
         }
 
-        public void UpdateDatabase(Database.DatabaseInstance database)
+        public void UpdateMusicLog(MusicLogApi musicLog)
         {
-            _database = database;
-        }
-
-        public void UpdateSpotifyAuth(SpotifyAPI.Web.SpotifyWebAPI auth)
-        {
-            _spotifyAuth = auth;
+            _musicLog = musicLog;
         }
 
         private void InputModule_Load(object sender, EventArgs e)
@@ -60,14 +52,13 @@ namespace MusicLog
         {
             
             string query = textBox1.Text;
-            _spotifyAuth = WebApi.Spotify.SpotifyApi.GetAuthObj();
 
             // Populating list of artists
-            List<Database.Artist> artists = WebApi.Spotify.SpotifyApi.GetArtists(query, _spotifyAuth);
-            foreach (Database.Artist artist in artists)
+            List<Artist> artists = _musicLog.GetSpotifyArtists(query);
+            foreach (Artist artist in artists)
             {
-                artist.Albums = WebApi.Spotify.SpotifyApi.GetAlbums(artist, _spotifyAuth);
-                if (artist.Albums.Count == 0)
+                List<Album> albums = _musicLog.GetSpotifyAlbums(artist);
+                if (albums.Count == 0)
                 {
                     continue;
                 }
@@ -93,33 +84,35 @@ namespace MusicLog
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var checkedArtists = new List<Database.Artist>();
+            var checkedArtists = new List<Artist>();
 
             // Adds any checked albums to database
             foreach(TreeNode node in treeView1.Nodes)
             {
                 if (node.Checked)
                 {
-                    var newArtist = new Database.Artist();
+                    var newArtist = new Artist();
                     newArtist.Name = node.Text;
                     newArtist.SpotifyID = (string)node.Tag;
                     checkedArtists.Add(newArtist);
                 }
             }
-            
-            foreach(Database.Artist artist in checkedArtists)
+
+            List<Album> allSpotifyAlbums = new List<Album>();
+            foreach(Artist artist in checkedArtists)
             {
-                artist.Albums = WebApi.Spotify.SpotifyApi.GetAlbums(artist, _spotifyAuth);
+                var albumQuery = _musicLog.GetSpotifyAlbums(artist);
+                _musicLog.AddAlbums(albumQuery, artist);
+                allSpotifyAlbums.AddRange(albumQuery);
             }
 
-            var allAlbums = checkedArtists.SelectMany(a => a.Albums).ToList();
-            foreach(Database.Album album in allAlbums)
+            foreach(Album album in allSpotifyAlbums)
             {
-                album.Tracks = WebApi.Spotify.SpotifyApi.GetTracks(album, _spotifyAuth);
+                var trackQuery = _musicLog.GetSpotifyTracks(album);
+                _musicLog.AddTracks(trackQuery, album);
             }
 
-            _database.AddArtists(checkedArtists);
-            _database.Save("database.xml"); 
+            _musicLog.Save();
         }
 
         
