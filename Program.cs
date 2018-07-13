@@ -15,12 +15,6 @@ namespace MusicLog
         {
             var settings = new UserSettings();
 
-            settings.Creds.SpotifyUser = "eriejar";
-            settings.Creds.SpotifyID = "86a63babc6bd4c84a6d49bd42ceec7b7";
-            settings.Creds.SpotifySecret = "1b7a620bd2504a79866398e4f2aadaff";
-            settings.Creds.LastFMUser = "eriejar";
-            settings.Creds.LastFMKey = "dc1c134531fc3eaa8ba716cc71fdcde9";
-
             var musicLogProgram = new MusicLogApi(settings);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

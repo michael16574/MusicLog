@@ -27,8 +27,7 @@ namespace MusicLog
             DefaultCredentialsPath = ExeDirectory + "\\credentials.xml";
             DatabasePath = DefaultDatabasePath;
             CredentialsPath = DefaultCredentialsPath;
-            Creds = new Credentials();
-            SaveCredentials(Creds);
+            LoadCredentials();
         }
         public UserSettings(string databasePath, string credentialsPath)
         {
