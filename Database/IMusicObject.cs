@@ -10,24 +10,24 @@ namespace MusicLog
     {
         string Name { get; set; }
         string SpotifyID { get; set; }
-        Guid ArtistID { get; set; }
+        Guid ID { get; set; }
     }
 
     public class Artist : IMusicObject
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
-        public Guid ArtistID { get; set; }
+        public Guid ID { get; set; }
 
         public Artist()
         {
-            ArtistID = Guid.NewGuid();       
+            ID = Guid.NewGuid();       
         }
         public Artist(string name, string spotifyID)
         {
             Name = name;
             SpotifyID = spotifyID;
-            ArtistID = Guid.NewGuid();
+            ID = Guid.NewGuid();
         }
     }
 
@@ -35,54 +35,51 @@ namespace MusicLog
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
-        public Guid ArtistID { get; set; }
+        public Guid ID { get; set; }
 
-        public Guid AlbumID;        
-        public bool Tracked;
+        public Guid ArtistID { get; set; }
+        public bool Tracked { get; set; }
 
         public Album()
         {
             ArtistID = Guid.Empty;
-            AlbumID = Guid.NewGuid();
+            ID = Guid.NewGuid();
             Tracked = false;
         }
-        public Album(string name, string id)
+        public Album(string name, string spotifyID)
         {
             Name = name;
-            SpotifyID = id;
+            SpotifyID = spotifyID;
             ArtistID = Guid.Empty;
-            AlbumID = Guid.NewGuid();
+            ID = Guid.NewGuid();
             Tracked = false;
         }
-        public Album(string name, string id, Guid artistID)
+        public Album(string name, string spotifyID, Guid artistID)
         {
             Name = name;
-            SpotifyID = id;
+            SpotifyID = spotifyID;
             ArtistID = artistID;
-            AlbumID = Guid.NewGuid();
+            ID = Guid.NewGuid();
             Tracked = false;
         }
-
-        
     }
 
     public class Track : IMusicObject
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
+        public Guid ID { get; set; }
+
         public Guid ArtistID { get; set; }
-
-        public Guid AlbumID;
-        public Guid TrackID;
-
-        public int TrackNo;
-        public int LastListenedUTS;
+        public Guid AlbumID { get; set; }
+        public int TrackNo { get; set; }
+        public int LastListenedUnix { get; set; }
 
         public Track()
         {
             ArtistID = Guid.Empty;
             AlbumID = Guid.Empty;
-            TrackID = Guid.NewGuid();
+            ID = Guid.NewGuid();
         }
         public Track(string name, string spotifyID)
         {
@@ -90,7 +87,7 @@ namespace MusicLog
             SpotifyID = spotifyID;
             ArtistID = Guid.Empty;
             AlbumID = Guid.Empty;
-            TrackID = Guid.NewGuid();
+            ID = Guid.NewGuid();
         }
         public Track(string name, string spotifyID, Guid albumID)
         {
@@ -98,7 +95,7 @@ namespace MusicLog
             SpotifyID = spotifyID;
             ArtistID = Guid.Empty;
             AlbumID = albumID;
-            TrackID = Guid.NewGuid();
+            ID = Guid.NewGuid();
         }
         public Track(string name, string spotifyID, Guid albumID, Guid artistID)
         {
@@ -106,18 +103,7 @@ namespace MusicLog
             SpotifyID = spotifyID;
             ArtistID = artistID;
             AlbumID = albumID;
-            TrackID = Guid.NewGuid();
-        }
-
-        public void UpdateHistory(int uts)
-        {
-            LastListenedUTS = uts;
-        }
-
-        public void UpdateHistory(DateTime time)
-        {
-            var dateTimeOffset = new DateTimeOffset(time);
-            LastListenedUTS = (int)dateTimeOffset.ToUnixTimeSeconds();
+            ID = Guid.NewGuid();
         }
     }
 }

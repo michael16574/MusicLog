@@ -13,13 +13,12 @@ namespace MusicLog
 {
     public partial class MainForm : Form
     {
-        private MusicLogApi _musicLog;
-        
+        private MusicLogClient _musicLog;
 
-        public MainForm(MusicLogApi musicLog)
+        public MainForm()
         {
             InitializeComponent();
-            _musicLog = musicLog;
+            _musicLog = MusicLogClient.Instance;
         }
 
         private void Input_Click(object sender, EventArgs e)

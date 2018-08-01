@@ -13,6 +13,8 @@ namespace MusicLog
     public static class SpotifyApi
     {
         private static ClientCredentialsAuth _auth;
+        private static SpotifyWebAPI _authobj;
+
 
         public static SpotifyWebAPI GetAuthObj(string clientID, string clientSecret)
         {
@@ -64,7 +66,17 @@ namespace MusicLog
             return SimpleTrackList;
         }
 
-        private static SpotifyWebAPI _authobj;
+        public static FullPlaylist CreatePlaylist(string playlistName, string userID, SpotifyWebAPI authObj)
+        {
+            FullPlaylist spotifyPlaylist = authObj.CreatePlaylist(userID, playlistName);
+            return spotifyPlaylist;
+        }
+
+        public static void AddPlaylistTracks(List<string> trackUris, FullPlaylist spotifyPL, SpotifyWebAPI authObj)
+        {
+            authObj.AddPlaylistTracks(spotifyPL.Owner.Id, spotifyPL.Id, trackUris);
+        }
+
         
     }
 }

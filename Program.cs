@@ -13,13 +13,15 @@ namespace MusicLog
         [STAThread]
         static void Main(string[] args)
         {
-            var settings = new UserSettings();
+            RunWinForm();   
+        }
 
-            var musicLogProgram = new MusicLogApi(settings);
+        private static void RunWinForm()
+        {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(musicLogProgram));
+            Application.Run(new MainForm());
         }
-    }
+    } 
 
 }

@@ -9,9 +9,6 @@ using System.Xml.Serialization;
 
 namespace MusicLog
 {
-    /// <summary>
-    /// Contains database and methods pertaining to modification of such.
-    /// </summary>
     public class DatabaseInstance
     {
         private XmlHandler _xmlHandler;
@@ -20,13 +17,13 @@ namespace MusicLog
 
         public DatabaseInstance()
         {
-            this._xmlHandler = new XmlHandler();
-            this._database = new MusicObjectTable();
+            _xmlHandler = new XmlHandler();
+            _database = new MusicObjectTable();
         }
-        public DatabaseInstance(string location)
+        public DatabaseInstance(string filePath)
         {
-            this._xmlHandler = new XmlHandler();
-            this._database = _xmlHandler.Deserialize(location);
+            _xmlHandler = new XmlHandler();
+            Load(filePath);
         }
 
         public void Save(string fileName)
@@ -35,7 +32,8 @@ namespace MusicLog
         }
         public void Load(string filePath)
         {
-            this._database = _xmlHandler.Deserialize(filePath);
+            _database = new MusicObjectTable();
+            _xmlHandler.Deserialize(_database, filePath);
         }
 
 
@@ -191,7 +189,7 @@ namespace MusicLog
         }
         public Artist FindArtist(Guid artistID)
         {
-            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.ArtistID == artistID);
+            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.ID == artistID);
             return activeArtist;
         }
 
@@ -202,13 +200,13 @@ namespace MusicLog
         }
         public Album FindAlbum(Guid albumID)
         {
-            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.AlbumID == albumID);
+            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.ID == albumID);
             return activeAlbum;
         }
         public List<Album> FindAlbums(Artist artist)
         {
             // Finds all albums linked to artist through ArtistID
-            List<Album> albums = _database.Albums.Where(a => a.ArtistID == artist.ArtistID).ToList();
+            List<Album> albums = _database.Albums.Where(a => a.ArtistID == artist.ID).ToList();
             return albums;
         }
 
@@ -219,19 +217,28 @@ namespace MusicLog
         }
         public Track FindTrack(Guid trackID)
         {
-            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.TrackID == trackID);
+            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.ID == trackID);
             return activeTrack;
         }
         public List<Track> FindTracks(Artist artist)
         {
             // Finds all tracks linked to artist through ArtistID
-            List<Track> tracks = _database.Tracks.Where(t => t.ArtistID == artist.ArtistID).ToList();
+            List<Track> tracks = _database.Tracks.Where(t => t.ArtistID == artist.ID).ToList();
             return tracks;
         }
         public List<Track> FindTracks(Album album)
         {
-            List<Track> tracks = _database.Tracks.Where(t => t.AlbumID == album.AlbumID).ToList();
+            List<Track> tracks = _database.Tracks.Where(t => t.AlbumID == album.ID).ToList();
             return tracks;
+        }
+        public IMusicObject FindMusicObject(Guid musicObjectID)
+        {
+            var musicObjectList = new List<IMusicObject>();
+            return musicObjectList.Union(_database.Artists)
+                                  .Union(_database.Albums)
+                                  .Union(_database.Tracks)
+                                  .Where(m => m.ID == musicObjectID)
+                                  .FirstOrDefault();
         }
 
     }

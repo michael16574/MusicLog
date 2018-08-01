@@ -2,74 +2,32 @@
 Updates a MusicLog with recent scrobbles from Last.FM
 
 User Workflow:
-DONE 1) User inputs artist
-DONE 2) GUI returns all artists, shown in a list
-DONE 3) User checks all artists to add to MusicLog
-DONE 4) User listens to random music on spotify
-DONE 5) Program periodically checks last x days from last scan of user listens and 
+(D) 1) User inputs artist
+(D) 2) GUI returns all artists, shown in a list
+(D) 3) User checks all artists to add to MusicLog
+(D) 4) User listens to random music on spotify
+(D) 5) Program periodically checks last x days from last scan of user listens and 
 compares to existing data, utilizing new data to mark any songs in the particular album as “completed”
-DONE 6) User can also see time and date of previous listens
-DONE 7) User needs to manually mark albums / songs as listened to
-DONE 8) User needs to unmark previous listens
-DONE 9) User needs to delete artists or albums from list
-DONE 10) User needs to retrieve missing albums from artist
+(D) 6) User can also see time and date of previous listens
+(D) 7) User needs to manually mark albums / songs as listened to
+(D) 8) User needs to unmark previous listens
+(D) 9) User needs to delete artists or albums from list
+(D) 10) User needs to retrieve missing albums from artist
 
 Refactoring:
 
-A) Artist, Album, Track GUID Implementation
-B) Facade, Interface Implementation
-C) MVC Implementation
+(D) A) Artist, Album, Track GUID Implementation
+(D) B) Facade, Interface Implementation
+(D) C) MVC Implementation / WPF
+(D) D) Remove albums/tracks when artist removed
 
 Additional Features:
-A) History Page - All listens ordered
-B) Playlists - Auto-spotify playlist making with selected albums
-C) Upcoming Organizer - Add albums to orderable list which user will be listening to
-D) Home Page - Upcoming albums laid out
-E) Database Upgrade - SQL
-F) GUI Upgrade - ASP.NET / WPF
-
-
-Macroscopic Outline:
-
-Artist Object
-	Artist Name
-	Artist ID
-	Image Link
-	
-
-A. Authorizes Application
-	1)  https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Docs/docs/SpotifyWebAPI/auth.md
-
-B. Returns Struct (Artists)
-	1) Argument: String USER, String Artist
-	2) Spotify API-.NET
-		a. SearchItems - returns multiple items
-		b. Extract Artists into Struct
-	3) Returns Struct (Artists)
-
-C. Returns Struct (Albums)
-	1) Argument: Object Artist
-	2) Spotify API-.NET
-		a. SearchAlbums
-b. Extract Albums into Struct
-3) Returns Struct (Albums)
-D. Returns Scrobbles from Artist
-1) Argument: String Artist
-2) user.GetTracks
-
-
-E. Create XML Database
-F. Add Artist to database
-G. Add Album to existing Artist in database
-J. Set active database to Database
-K. Add Song to database
-
-H. Remove Artist from data base
-I. Remove Album from data base
-L. Remove Song from data base
-M. Modify Song Date
-
-Compare Song uts with Database Song’s uts
-
-Update Artist Song’s UTS
-
+(D) History Page - All listens ordered, general textbox filter, date selection
+( ) Playlists - Auto-spotify playlist making with selected albums
+( ) Upcoming Organizer - Add albums to orderable list which user will be listening to
+( ) Settings Page / Formatting - Data Saving Location
+( ) Home Page - Upcoming albums laid out
+( ) Database Upgrade - SQL
+( ) Completed Shelf - Archived Albums not being tracked
+( ) Inhouse Spotify Player
+( ) Animation / GUI Upgrade - Images and UI similar to MusicBee

@@ -10,23 +10,21 @@ namespace MusicLog
 {
     public class XmlHandler
     {
-
-        public void Serialize(MusicObjectTable table, string fileName)
+        public void Serialize<T>(T obj, string fileName)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(MusicObjectTable));
+            XmlSerializer ser = new XmlSerializer(typeof(T));
             TextWriter writer = new StreamWriter(fileName);
-            ser.Serialize(writer, table);
+            ser.Serialize(writer, obj);
             writer.Close();
         }
 
-        public MusicObjectTable Deserialize(string filePath)
+        public void Deserialize<T>(T container, string filePath)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(MusicObjectTable));
+            XmlSerializer ser = new XmlSerializer(typeof(T));
             StreamReader reader = new StreamReader(filePath);
-            MusicObjectTable musicTable = new MusicObjectTable();
-            musicTable = (MusicObjectTable)ser.Deserialize(reader);
+            container = (T)ser.Deserialize(reader);
             reader.Close();
-            return musicTable;
         }
+        
     }
 }

@@ -13,7 +13,7 @@ namespace MusicLog
     public partial class DatabaseModule : UserControl
     {
         private static DatabaseModule _instance;
-        private MusicLogApi _musicLog;
+        private MusicLogClient _musicLog;
 
         public static DatabaseModule Instance
         {
@@ -27,7 +27,7 @@ namespace MusicLog
             }
         }
 
-        public void UpdateMusicLog(MusicLogApi musicLog)
+        public void UpdateMusicLog(MusicLogClient musicLog)
         {
             _musicLog = musicLog;
         }
@@ -115,7 +115,7 @@ namespace MusicLog
 
             foreach (var track in _musicLog.GetTracks(selectedAlbum))
             {
-                string time = GetTimeFromUnix(track.LastListenedUTS);
+                string time = GetTimeFromUnix(track.LastListenedUnix);
 
                 var newItm = new ListViewItem(track.TrackNo.ToString());
                 newItm.SubItems.Add(new ListViewItem.ListViewSubItem(newItm, track.Name));
@@ -147,7 +147,7 @@ namespace MusicLog
         {
             // Updating track UTS in database
             var selectedTrack = (Track)TrackListView.SelectedItems[0].Tag;
-            selectedTrack.UpdateHistory(DateTime.UtcNow);
+            _musicLog.UpdateHistory(DateTime.UtcNow, selectedTrack);
 
             // Updating listview
             AlbumListView_SelectedIndexChanged(this, EventArgs.Empty);
@@ -168,7 +168,7 @@ namespace MusicLog
         {
             // Updating track UTS in database
             var selectedTrack = (Track)TrackListView.SelectedItems[0].Tag;
-            selectedTrack.UpdateHistory(0);
+            _musicLog.UpdateHistory(0, selectedTrack);
 
             // Updating listview
             AlbumListView_SelectedIndexChanged(this, EventArgs.Empty);

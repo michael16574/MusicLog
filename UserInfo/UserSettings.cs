@@ -13,9 +13,11 @@ namespace MusicLog
         public string ExeDirectory;
 
         public string DefaultDatabasePath;
+        public string DefaultPlaylistPath;
         public string DefaultCredentialsPath;
 
         public string DatabasePath;
+        public string PlaylistPath;
         public string CredentialsPath;
 
         public Credentials Creds;
@@ -23,19 +25,29 @@ namespace MusicLog
         public UserSettings()
         {
             ExeDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+
             DefaultDatabasePath = ExeDirectory + "\\database.xml";
+            DefaultPlaylistPath = ExeDirectory + "\\playlist.xml";
             DefaultCredentialsPath = ExeDirectory + "\\credentials.xml";
+
             DatabasePath = DefaultDatabasePath;
+            PlaylistPath = DefaultPlaylistPath;
             CredentialsPath = DefaultCredentialsPath;
+
             LoadCredentials();
         }
-        public UserSettings(string databasePath, string credentialsPath)
+        public UserSettings(string databasePath, string playlistPath, string credentialsPath)
         {
             ExeDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            
             DefaultDatabasePath = ExeDirectory + "\\database.xml";
+            DefaultPlaylistPath = ExeDirectory + "\\playlist.xml";
             DefaultCredentialsPath = ExeDirectory + "\\credentials.xml";
+
             DatabasePath = databasePath;
+            PlaylistPath = playlistPath;
             CredentialsPath = credentialsPath;
+
             LoadCredentials();
         }
 

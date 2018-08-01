@@ -14,7 +14,7 @@ namespace MusicLog
     public partial class InputModule : UserControl
     {
         private static InputModule _instance;
-        private MusicLogApi _musicLog;
+        private MusicLogClient _musicLog;
 
         public static InputModule Instance
         {
@@ -33,7 +33,7 @@ namespace MusicLog
             InitializeComponent();
         }
 
-        public void UpdateMusicLog(MusicLogApi musicLog)
+        public void UpdateMusicLog(MusicLogClient musicLog)
         {
             _musicLog = musicLog;
         }
