@@ -14,12 +14,14 @@ namespace MusicLog
 
         public PlaylistObject()
         {
-            ID = Guid.NewGuid();
+            Albums = new List<Guid>();
+            ID = Guid.NewGuid();           
         }
 
         public PlaylistObject(string name)
         {
             Name = name;
+            Albums = new List<Guid>();
             ID = Guid.NewGuid();
         }
 

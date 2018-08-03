@@ -25,12 +25,12 @@ namespace MusicLog
 
         public void Save(string fileName)
         {
-            _xmlHandler.Serialize(_playlists, fileName);
+            _xmlHandler.Serialize(ref _playlists, fileName);
         }
         public void Load(string filePath)
         {
             _playlists = new List<PlaylistObject>();
-            _xmlHandler.Deserialize(_playlists, filePath);
+            _xmlHandler.Deserialize(ref _playlists, filePath);
         }
 
         public void Add(PlaylistObject playlist)

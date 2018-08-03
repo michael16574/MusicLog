@@ -28,12 +28,12 @@ namespace MusicLog
 
         public void Save(string fileName)
         {
-            _xmlHandler.Serialize(_database, fileName);
+            _xmlHandler.Serialize(ref _database, fileName);
         }
         public void Load(string filePath)
         {
             _database = new MusicObjectTable();
-            _xmlHandler.Deserialize(_database, filePath);
+            _xmlHandler.Deserialize(ref _database, filePath);
         }
 
 
@@ -239,6 +239,15 @@ namespace MusicLog
                                   .Union(_database.Tracks)
                                   .Where(m => m.ID == musicObjectID)
                                   .FirstOrDefault();
+        }
+        public List<IMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
+        {
+            var musicObjectList = new List<IMusicObject>();
+            return musicObjectList.Union(_database.Artists)
+                                  .Union(_database.Albums)
+                                  .Union(_database.Tracks)
+                                  .Where(m => musicObjectIDs.Contains(m.ID))
+                                  .ToList();
         }
 
     }

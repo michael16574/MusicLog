@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -12,22 +13,46 @@ namespace MusicLog
 {
     public static class SpotifyApi
     {
-        private static ClientCredentialsAuth _auth;
         private static SpotifyWebAPI _authobj;
 
 
-        public static SpotifyWebAPI GetAuthObj(string clientID, string clientSecret)
+        public static async Task<SpotifyWebAPI> GetAuthObjByImplicitGrant(string clientID)
         {
-            // Generates an object that can be used to authorize any requests to the Spotify API
-            _auth = new ClientCredentialsAuth()
+            WebAPIFactory webApiFactory = new WebAPIFactory("http://localhost",
+                                                            8000,
+                                                            clientID,
+                                                            Scope.UserReadPrivate | Scope.PlaylistModifyPrivate | Scope.PlaylistModifyPublic,
+                                                            TimeSpan.FromSeconds(20));
+
+            try
+            {
+                _authobj = await webApiFactory.GetWebApi();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            if (_authobj == null)
+            {
+                return null;
+            }
+
+            return _authobj;
+        }
+
+        
+        public static SpotifyWebAPI GetAuthObjByClientCred(string clientID, string clientSecret)
+        {
+            var auth = new ClientCredentialsAuth()
             {
 
                 ClientId = clientID,
                 ClientSecret = clientSecret,
-                Scope = Scope.UserReadPrivate
+                Scope = Scope.UserReadPrivate | Scope.PlaylistModifyPrivate | Scope.PlaylistModifyPublic
             };
 
-            Token token = _auth.DoAuth();
+            Token token = auth.DoAuth();
             _authobj = new SpotifyWebAPI()
             {
                 TokenType = token.TokenType,
@@ -37,6 +62,7 @@ namespace MusicLog
 
             return _authobj;          
         }
+       
 
         public static List<FullArtist> SearchArtists(string query, SpotifyWebAPI authObj)
         {          
@@ -74,7 +100,23 @@ namespace MusicLog
 
         public static void AddPlaylistTracks(List<string> trackUris, FullPlaylist spotifyPL, SpotifyWebAPI authObj)
         {
-            authObj.AddPlaylistTracks(spotifyPL.Owner.Id, spotifyPL.Id, trackUris);
+            var fullTrackUris = new List<string>();
+            int counter = 0;
+
+            foreach (string uri in trackUris)
+            {
+                fullTrackUris.Add("spotify:track:" + uri);
+                counter += 1;
+
+                if (counter >= 100)
+                {                   
+                    authObj.AddPlaylistTracks(spotifyPL.Owner.Id, spotifyPL.Id, fullTrackUris);
+                    counter = 0;
+                    fullTrackUris.Clear();
+                }                
+            }
+
+            authObj.AddPlaylistTracks(spotifyPL.Owner.Id, spotifyPL.Id, fullTrackUris);
         }
 
         

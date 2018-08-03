@@ -64,6 +64,11 @@ namespace MusicLog
             return _database.FindMusicObject(musicObjectID);
         }
 
+        public List<IMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
+        {
+            return _database.FindMusicObjects(musicObjectIDs);
+        }
+
         public List<Artist> GetArtists()
         {
             return _database.GetArtists();
@@ -287,8 +292,7 @@ namespace MusicLog
 
         public void UpdateSpotifyAuth(Credentials creds)
         {
-            _spotifyAuth = new SpotifyWebAPI();
-            _spotifyAuth = SpotifyApi.GetAuthObj(creds.SpotifyID, creds.SpotifySecret);
+            _spotifyAuth = SpotifyApi.GetAuthObjByImplicitGrant(creds.SpotifyID).Result;
         }
 
         public List<Artist> GetSpotifyArtists(string query)
@@ -506,7 +510,7 @@ namespace MusicLog
                 }
             }
 
-            FullPlaylist newPlaylist = SpotifyApi.CreatePlaylist(playlist.Name, _settings.Creds.SpotifyID, _spotifyAuth);
+            FullPlaylist newPlaylist = SpotifyApi.CreatePlaylist(playlist.Name, _settings.Creds.SpotifyUser, _spotifyAuth);
             SpotifyApi.AddPlaylistTracks(trackUris, newPlaylist, _spotifyAuth);
         }
 

@@ -10,7 +10,7 @@ namespace MusicLog
 {
     public class XmlHandler
     {
-        public void Serialize<T>(T obj, string fileName)
+        public void Serialize<T>(ref T obj, string fileName)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
             TextWriter writer = new StreamWriter(fileName);
@@ -18,7 +18,7 @@ namespace MusicLog
             writer.Close();
         }
 
-        public void Deserialize<T>(T container, string filePath)
+        public void Deserialize<T>(ref T container, string filePath)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
             StreamReader reader = new StreamReader(filePath);
