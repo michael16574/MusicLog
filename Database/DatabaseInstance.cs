@@ -231,18 +231,18 @@ namespace MusicLog
             List<Track> tracks = _database.Tracks.Where(t => t.AlbumID == album.ID).ToList();
             return tracks;
         }
-        public IMusicObject FindMusicObject(Guid musicObjectID)
+        public ISpotifyMusicObject FindMusicObject(Guid musicObjectID)
         {
-            var musicObjectList = new List<IMusicObject>();
+            var musicObjectList = new List<ISpotifyMusicObject>();
             return musicObjectList.Union(_database.Artists)
                                   .Union(_database.Albums)
                                   .Union(_database.Tracks)
                                   .Where(m => m.ID == musicObjectID)
                                   .FirstOrDefault();
         }
-        public List<IMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
+        public List<ISpotifyMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
         {
-            var musicObjectList = new List<IMusicObject>();
+            var musicObjectList = new List<ISpotifyMusicObject>();
             return musicObjectList.Union(_database.Artists)
                                   .Union(_database.Albums)
                                   .Union(_database.Tracks)

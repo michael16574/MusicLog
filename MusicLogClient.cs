@@ -59,12 +59,12 @@ namespace MusicLog
             return _database.FindAlbum(track.AlbumID);
         }
 
-        public IMusicObject GetMusicObject(Guid musicObjectID)
+        public ISpotifyMusicObject GetMusicObject(Guid musicObjectID)
         {
             return _database.FindMusicObject(musicObjectID);
         }
 
-        public List<IMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
+        public List<ISpotifyMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
         {
             return _database.FindMusicObjects(musicObjectIDs);
         }

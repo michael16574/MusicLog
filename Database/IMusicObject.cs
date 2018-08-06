@@ -9,11 +9,15 @@ namespace MusicLog
     public interface IMusicObject
     {
         string Name { get; set; }
-        string SpotifyID { get; set; }
         Guid ID { get; set; }
     }
 
-    public class Artist : IMusicObject
+    public interface ISpotifyMusicObject : IMusicObject
+    {
+        string SpotifyID { get; set; }
+    }
+
+    public class Artist : ISpotifyMusicObject
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
@@ -31,7 +35,7 @@ namespace MusicLog
         }
     }
 
-    public class Album : IMusicObject
+    public class Album : ISpotifyMusicObject
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
@@ -64,7 +68,7 @@ namespace MusicLog
         }
     }
 
-    public class Track : IMusicObject
+    public class Track : ISpotifyMusicObject
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
