@@ -24,6 +24,6 @@ Refactoring:
 Additional Features:
 (D) History Page - All listens ordered, general textbox filter, date selection
 (D) Playlists - Auto-spotify playlist making with selected albums
+(D) Custom Artist / Album Functionality
 ( ) Database Upgrade - SQL
 ( ) Inhouse Spotify Player
-( ) Animation / GUI Upgrade - Images and UI similar to MusicBee

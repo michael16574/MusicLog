@@ -59,34 +59,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\MusicObjectTable.cs" />
+    <Compile Include="Models\CustomAlbum.cs" />
+    <Compile Include="Models\CustomArtist.cs" />
+    <Compile Include="Models\Interfaces\IAlbum.cs" />
+    <Compile Include="Models\Interfaces\IArtist.cs" />
+    <Compile Include="Models\Interfaces\ISpotifyMusicObject.cs" />
+    <Compile Include="Models\Interfaces\ITrack.cs" />
+    <Compile Include="Models\MusicObjectTable.cs" />
     <Compile Include="Database\PlaylistInstance.cs" />
     <Compile Include="Database\PlaylistObject.cs" />
+    <Compile Include="Models\SpotifyAlbum.cs" />
+    <Compile Include="Models\SpotifyArtist.cs" />
+    <Compile Include="Models\SpotifyTrack.cs" />
+    <Compile Include="Models\CustomTrack.cs" />
     <Compile Include="UserInfo\Credentials.cs" />
     <Compile Include="UserInfo\UserSettings.cs" />
-    <Compile Include="WinForm\Views\DatabaseModule.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WinForm\Views\DatabaseModule.Designer.cs">
-      <DependentUpon>DatabaseModule.cs</DependentUpon>
-    </Compile>
     <Compile Include="Database\DatabaseInstance.cs" />
-    <Compile Include="Database\IMusicObject.cs" />
+    <Compile Include="Models\Interfaces\IMusicObject.cs" />
     <Compile Include="Database\XmlHandler.cs" />
-    <Compile Include="WinForm\Views\InputModule.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WinForm\Views\InputModule.Designer.cs">
-      <DependentUpon>InputModule.cs</DependentUpon>
-    </Compile>
     <Compile Include="WebApi\LastFM\LastFMResponse_AlbumGetInfo.cs" />
     <Compile Include="WebApi\LastFM\LastFMResponse_GetArtistTracks.cs" />
-    <Compile Include="WinForm\Views\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForm\Views\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="WebApi\LastFM\LastFMApi.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,15 +97,6 @@
     <None Include="Properties\DataSources\MusicLog.Database.DatabaseInstance.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WinForm\Views\DatabaseModule.resx">
-      <DependentUpon>DatabaseModule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForm\Views\InputModule.resx">
-      <DependentUpon>InputModule.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForm\Views\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

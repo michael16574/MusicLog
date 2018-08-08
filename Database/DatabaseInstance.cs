@@ -37,41 +37,28 @@ namespace MusicLog
         }
 
 
-        public List<Artist> GetArtists()
+        public List<IArtist> GetArtists()
         {
             return _database.Artists;
         }
 
-        public void AddArtist(Artist artist)
+        public void AddArtist(IArtist artist)
         {
             _database.Artists.Add(artist);
         }
-        public void AddArtists(List<Artist> artists)
+        public void AddArtists(List<IArtist> artists)
         {
             _database.Artists.AddRange(artists);
         }
         
-        public void RemoveArtist(string name, string spotifyID)
-        {
-            Artist artist = FindArtist(new Artist(name, spotifyID));
-            if (artist != null)
-            {
-                _database.Artists.Remove(artist);
-            }
-        }
-        public void RemoveArtist(Artist artist)
+        public void RemoveArtist(IArtist artist)
         {
             if (_database.Artists.Contains(artist))
             {
                 _database.Artists.Remove(artist);
             }
-            else
-            {
-                // In instance where artist is not part of database
-                RemoveArtist(artist.Name, artist.SpotifyID);
-            }
         }
-        public void RemoveArtists(List<Artist> artists)
+        public void RemoveArtists(List<IArtist> artists)
         {
             foreach(var artist in artists)
             {
@@ -80,41 +67,28 @@ namespace MusicLog
         }
 
 
-        public List<Album> GetAlbums()
+        public List<IAlbum> GetAlbums()
         {
             return _database.Albums;
         }
 
-        public void AddAlbum(Album album)
+        public void AddAlbum(IAlbum album)
         {
             _database.Albums.Add(album);
         }
-        public void AddAlbums(List<Album> albums)
+        public void AddAlbums(List<IAlbum> albums)
         {
             _database.Albums.AddRange(albums);
         }
 
-        public void RemoveAlbum(string name, string spotifyID)
-        {
-            Album album = FindAlbum(new Album(name, spotifyID));
-            if (album != null)
-            {
-                _database.Albums.Remove(album);
-            }
-        }
-        public void RemoveAlbum(Album album)
+        public void RemoveAlbum(IAlbum album)
         {
             if (_database.Albums.Contains(album))
             {
                 _database.Albums.Remove(album);
             }
-            else
-            {
-                // In instance where album is not part of database
-                RemoveAlbum(album.Name, album.SpotifyID);
-            }
         }
-        public void RemoveAlbums(List<Album> albums)
+        public void RemoveAlbums(List<IAlbum> albums)
         {
             foreach (var album in albums)
             {
@@ -122,14 +96,14 @@ namespace MusicLog
             }
         }
 
-        public void TrackAlbums(List<Album> albums)
+        public void TrackAlbums(List<IAlbum> albums)
         {
             foreach(var album in albums)
             {
                 album.Tracked = true;
             }
         }
-        public void UntrackAlbums(List<Album> albums)
+        public void UntrackAlbums(List<IAlbum> albums)
         {
             foreach(var album in albums)
             {
@@ -138,41 +112,28 @@ namespace MusicLog
         }
 
 
-        public List<Track> GetTracks()
+        public List<ITrack> GetTracks()
         {
             return _database.Tracks;
         }
        
-        public void AddTrack(Track track)
+        public void AddTrack(ITrack track)
         {
             _database.Tracks.Add(track);
         }
-        public void AddTracks(List<Track> tracks)
+        public void AddTracks(List<ITrack> tracks)
         {
             _database.Tracks.AddRange(tracks);
         }
 
-        public void RemoveTrack(string name, string spotifyID)
-        {
-            Track track = FindTrack(new Track(name, spotifyID));
-            if (track != null)
-            {
-                _database.Tracks.Remove(track);
-            }
-        }
-        public void RemoveTrack(Track track)
+        public void RemoveTrack(ITrack track)
         {
             if (_database.Tracks.Contains(track))
             {
                 _database.Tracks.Remove(track);
             }
-            else
-            {
-                // In instance where track is not part of database
-                RemoveAlbum(track.Name, track.SpotifyID);
-            }
         }
-        public void RemoveTracks(List<Track> tracks)
+        public void RemoveTracks(List<ITrack> tracks)
         {
             foreach (var track in tracks)
             {
@@ -180,69 +141,127 @@ namespace MusicLog
             }
         }
 
+
+        public IArtist FindArtist(IArtist artist)
+        {
+            IArtist activeArtist = null;
+            switch (artist)
+            {
+                case SpotifyArtist s:
+                    activeArtist = FindArtist(s);
+                    break;
+                case CustomArtist a:
+                    activeArtist = FindArtist(a);
+                    break;                  
+            }
+            
+            return activeArtist;
+        }
+        public IArtist FindArtist(Guid artistID)
+        {
+            IArtist activeArtist = _database.Artists.FirstOrDefault(a => a.ID == artistID);
+            return activeArtist;
+        }
+        private IArtist FindArtist(CustomArtist artist)
+        {
+            var artists = _database.Artists.Where(a => a is CustomArtist).Cast<CustomArtist>();
+            CustomArtist matchedArtist = artists.FirstOrDefault(a => a.Name == artist.Name);
+            return matchedArtist;
+        }
+        private IArtist FindArtist(SpotifyArtist artist)
+        {
+            var spotifyArtists = _database.Artists.Where(a => a is SpotifyArtist).Cast<SpotifyArtist>();
+            SpotifyArtist matchedArtist = spotifyArtists.FirstOrDefault(a => a.Name == artist.Name && a.SpotifyID == artist.SpotifyID);
+            return matchedArtist;
+        }
         
+        public IAlbum FindAlbum(IAlbum album)
+        {
+            IAlbum activeAlbum = null;
+            switch (album)
+            {
+                case SpotifyAlbum s:
+                    activeAlbum = FindAlbum(s);
+                    break;
+                case CustomAlbum a:
+                    activeAlbum = FindAlbum(a);
+                    break;
+            }
 
-        public Artist FindArtist(Artist artist)
-        {
-            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.Name == artist.Name && a.SpotifyID == artist.SpotifyID);
-            return activeArtist;
-        }
-        public Artist FindArtist(Guid artistID)
-        {
-            Artist activeArtist = _database.Artists.FirstOrDefault(a => a.ID == artistID);
-            return activeArtist;
-        }
-
-        public Album FindAlbum(Album album)
-        {
-            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.Name == album.Name && a.SpotifyID == album.SpotifyID);
             return activeAlbum;
         }
-        public Album FindAlbum(Guid albumID)
+        public IAlbum FindAlbum(Guid albumID)
         {
-            Album activeAlbum = _database.Albums.FirstOrDefault(a => a.ID == albumID);
+            IAlbum activeAlbum = _database.Albums.FirstOrDefault(a => a.ID == albumID);
             return activeAlbum;
         }
-        public List<Album> FindAlbums(Artist artist)
+        private IAlbum FindAlbum(CustomAlbum album)
+        { 
+            var albums = _database.Albums.Where(a => a is CustomAlbum).Cast<CustomAlbum>();
+            CustomAlbum matchedAlbum = albums.FirstOrDefault(a => a.Name == album.Name);
+            return matchedAlbum;
+        }
+        private IAlbum FindAlbum(SpotifyAlbum album)
+        {
+            var spotifyAlbums = _database.Albums.Where(a => a is SpotifyAlbum).Cast<SpotifyAlbum>();
+            SpotifyAlbum matchedAlbum = spotifyAlbums.FirstOrDefault(a => a.Name == album.Name && a.SpotifyID == album.SpotifyID);
+            return matchedAlbum;
+        }
+        
+        public List<IAlbum> FindAlbums(IArtist artist)
         {
             // Finds all albums linked to artist through ArtistID
-            List<Album> albums = _database.Albums.Where(a => a.ArtistID == artist.ID).ToList();
+            List<IAlbum> albums = _database.Albums.Where(a => a.ArtistID == artist.ID).ToList();
             return albums;
         }
 
-        public Track FindTrack(Track track)
+        public ITrack FindTrack(ITrack track)
         {
-            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.Name == track.Name && t.SpotifyID == track.SpotifyID);
+            var activeTrack = _database.Tracks.FirstOrDefault(t => t.Name == track.Name);
             return activeTrack;
         }
-        public Track FindTrack(Guid trackID)
+        public ITrack FindTrack(Guid trackID)
         {
-            Track activeTrack = _database.Tracks.FirstOrDefault(t => t.ID == trackID);
+            ITrack activeTrack = _database.Tracks.FirstOrDefault(t => t.ID == trackID);
             return activeTrack;
         }
-        public List<Track> FindTracks(Artist artist)
+        private ITrack FindTrack(CustomTrack track)
         {
-            // Finds all tracks linked to artist through ArtistID
-            List<Track> tracks = _database.Tracks.Where(t => t.ArtistID == artist.ID).ToList();
+            var tracks = _database.Tracks.Where(t => t is CustomTrack).Cast<CustomTrack>();
+            CustomTrack activeTrack = tracks.FirstOrDefault(t => t.Name == track.Name);
+            return activeTrack;
+        }
+        private ITrack FindTrack(SpotifyTrack track)
+        {
+            var spotifyTracks = _database.Tracks.Where(t => t is SpotifyTrack).Cast<SpotifyTrack>();
+            SpotifyTrack activeTrack = spotifyTracks.FirstOrDefault(t => t.Name == track.Name && t.SpotifyID == track.SpotifyID);
+            return activeTrack;
+        }
+        
+        public List<ITrack> FindTracks(IArtist artist)
+        {
+            List<ITrack> tracks = _database.Tracks.Where(t => t.ArtistID == artist.ID).ToList();
             return tracks;
         }
-        public List<Track> FindTracks(Album album)
+
+        public List<ITrack> FindTracks(IAlbum album)
         {
-            List<Track> tracks = _database.Tracks.Where(t => t.AlbumID == album.ID).ToList();
+            List<ITrack> tracks = _database.Tracks.Where(t => t.AlbumID == album.ID).ToList();
             return tracks;
         }
-        public ISpotifyMusicObject FindMusicObject(Guid musicObjectID)
+
+        public IMusicObject FindMusicObject(Guid musicObjectID)
         {
-            var musicObjectList = new List<ISpotifyMusicObject>();
+            var musicObjectList = new List<IMusicObject>();
             return musicObjectList.Union(_database.Artists)
                                   .Union(_database.Albums)
                                   .Union(_database.Tracks)
                                   .Where(m => m.ID == musicObjectID)
                                   .FirstOrDefault();
         }
-        public List<ISpotifyMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
+        public List<IMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
         {
-            var musicObjectList = new List<ISpotifyMusicObject>();
+            var musicObjectList = new List<IMusicObject>();
             return musicObjectList.Union(_database.Artists)
                                   .Union(_database.Albums)
                                   .Union(_database.Tracks)

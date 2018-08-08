@@ -70,7 +70,7 @@ namespace MusicLog
             return searchItems.Artists.Items;
         }
 
-        public static List<SimpleAlbum> SearchAlbums(Artist artistObj, SpotifyWebAPI authObj)
+        public static List<SimpleAlbum> SearchAlbums(SpotifyArtist artistObj, SpotifyWebAPI authObj)
         {
             Paging<SimpleAlbum> PagingObj = authObj.GetArtistsAlbums(artistObj.SpotifyID, AlbumType.Album);
             List<SimpleAlbum> SimpleAlbumList = new List<SimpleAlbum>();     
@@ -81,7 +81,7 @@ namespace MusicLog
             return SimpleAlbumList;
         }
 
-        public static List<SimpleTrack> SearchTracks(Album albumObj, SpotifyWebAPI authObj)
+        public static List<SimpleTrack> SearchTracks(SpotifyAlbum albumObj, SpotifyWebAPI authObj)
         {
             Paging<SimpleTrack> PagingObj = authObj.GetAlbumTracks(albumObj.SpotifyID, 50);
             List<SimpleTrack> SimpleTrackList = new List<SimpleTrack>();

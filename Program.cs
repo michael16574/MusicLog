@@ -13,15 +13,8 @@ namespace MusicLog
         [STAThread]
         static void Main(string[] args)
         {
-            RunWinForm();   
         }
-
-        private static void RunWinForm()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
-        }
+        
     } 
 
 }

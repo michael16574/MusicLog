@@ -54,10 +54,10 @@ namespace MusicLog
             string query = textBox1.Text;
 
             // Populating list of artists
-            List<Artist> artists = _musicLog.GetSpotifyArtists(query);
-            foreach (Artist artist in artists)
+            List<SpotifyArtist> artists = _musicLog.GetSpotifyArtists(query);
+            foreach (SpotifyArtist artist in artists)
             {
-                List<Album> albums = _musicLog.GetSpotifyAlbums(artist);
+                List<SpotifyAlbum> albums = _musicLog.GetSpotifyAlbums(artist);
                 if (albums.Count == 0)
                 {
                     continue;
@@ -84,29 +84,29 @@ namespace MusicLog
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var checkedArtists = new List<Artist>();
+            var checkedArtists = new List<SpotifyArtist>();
 
             // Adds any checked albums to database
             foreach(TreeNode node in treeView1.Nodes)
             {
                 if (node.Checked)
                 {
-                    var newArtist = new Artist();
+                    var newArtist = new SpotifyArtist();
                     newArtist.Name = node.Text;
                     newArtist.SpotifyID = (string)node.Tag;
                     checkedArtists.Add(newArtist);
                 }
             }
 
-            List<Album> allSpotifyAlbums = new List<Album>();
-            foreach(Artist artist in checkedArtists)
+            List<SpotifyAlbum> allSpotifyAlbums = new List<SpotifyAlbum>();
+            foreach(SpotifyArtist artist in checkedArtists)
             {
                 var albumQuery = _musicLog.GetSpotifyAlbums(artist);
                 _musicLog.AddAlbums(albumQuery, artist);
                 allSpotifyAlbums.AddRange(albumQuery);
             }
 
-            foreach(Album album in allSpotifyAlbums)
+            foreach(SpotifyAlbum album in allSpotifyAlbums)
             {
                 var trackQuery = _musicLog.GetSpotifyTracks(album);
                 _musicLog.AddTracks(trackQuery, album);

@@ -46,73 +46,67 @@ namespace MusicLog
             _playlist.Save(_settings.PlaylistPath);
         }
 
-        public Artist GetParentArtist(Album album)
+        public IArtist GetParentArtist(IAlbum album)
         {
             return _database.FindArtist(album.ArtistID);
         }
-        public Artist GetParentArtist(Track track)
+        public IArtist GetParentArtist(ITrack track)
         {
             return _database.FindArtist(track.ArtistID);
         }
-        public Album GetParentAlbum(Track track)
+        public IAlbum GetParentAlbum(ITrack track)
         {
             return _database.FindAlbum(track.AlbumID);
         }
 
-        public ISpotifyMusicObject GetMusicObject(Guid musicObjectID)
+        public IMusicObject GetMusicObject(Guid musicObjectID)
         {
             return _database.FindMusicObject(musicObjectID);
         }
 
-        public List<ISpotifyMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
+        public List<IMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
         {
             return _database.FindMusicObjects(musicObjectIDs);
         }
 
-        public List<Artist> GetArtists()
+        public List<IArtist> GetArtists()
         {
             return _database.GetArtists();
         }
 
-        public List<Album> GetAlbums()
+        public List<IAlbum> GetAlbums()
         {
             return _database.GetAlbums();
         }
-        public List<Album> GetAlbums(Artist artist)
+        public List<IAlbum> GetAlbums(IArtist artist)
         {
             return _database.FindAlbums(artist);
         }
 
-        public List<Track> GetTracks()
+        public List<ITrack> GetTracks()
         {
             return _database.GetTracks();
         }
-        public List<Track> GetTracks(Artist artist)
+        public List<ITrack> GetTracks(IArtist artist)
         {
             return _database.FindTracks(artist);
         }
-        public List<Track> GetTracks(Album album)
+        public List<ITrack> GetTracks(IAlbum album)
         {
             return _database.FindTracks(album);
         }
 
-        public IEnumerable<Track> GetTracksWithHistory()
+        public IEnumerable<ITrack> GetTracksWithHistory()
         {
             return _database.GetTracks().Where(t => t.LastListenedUnix != 0);
         }
 
-        public void AddArtist(string name, string spotifyID)
-        {
-            Artist newArtist = new Artist(name, spotifyID);
-            _database.AddArtist(newArtist);
-            RemoveIfDuplicate(newArtist);
-        }
-        public void AddArtist(Artist artist)
+        public void AddArtist(IArtist artist)
         {
             _database.AddArtist(artist);
             RemoveIfDuplicate(artist);
         }
-        public void AddArtists(List<Artist> artists)
+        public void AddArtists(List<IArtist> artists)
         {
             var databaseArtists = _database.GetArtists();
             foreach (var artist in artists)
@@ -120,18 +114,15 @@ namespace MusicLog
                 AddArtist(artist);
             }
         }
+        
 
-        public void RemoveArtist(string name, string spotifyID)
-        {
-            RemoveAlbums(_database.FindAlbums(new Artist(name, spotifyID)));
-            _database.RemoveArtist(name, spotifyID);
-        }
-        public void RemoveArtist(Artist artist)
+
+        public void RemoveArtist(IArtist artist)
         {
             RemoveAlbums(_database.FindAlbums(artist));
             _database.RemoveArtist(artist);
         }
-        public void RemoveArtists(List<Artist> artists)
+        public void RemoveArtists(List<IArtist> artists)
         {
             foreach (var artist in artists)
             {
@@ -141,21 +132,14 @@ namespace MusicLog
         }
 
 
-        public void AddAlbum(string albumName, string albumSpotifyID, Artist artist)
-        {
-            artist = ArtistInDBConfirmation(artist);
-            Album newAlbum = new Album(albumName, albumSpotifyID, artist.ID);
-            _database.AddAlbum(newAlbum);
-            RemoveIfDuplicate(newAlbum);
-        }
-        public void AddAlbum(Album album, Artist artist)
+        public void AddAlbum(IAlbum album, IArtist artist)
         {
             artist = ArtistInDBConfirmation(artist);
             album.ArtistID = artist.ID;
             _database.AddAlbum(album);
             RemoveIfDuplicate(album);
         }
-        public void AddAlbums(List<Album> albums, Artist artist)
+        public void AddAlbums(List<IAlbum> albums, IArtist artist)
         {
             artist = ArtistInDBConfirmation(artist);
 
@@ -167,18 +151,13 @@ namespace MusicLog
             }
         }
 
-        public void RemoveAlbum(string name, string spotifyID)
-        {
-            RemoveTracks(_database.FindTracks(new Album(name, spotifyID)));
-            _database.RemoveAlbum(name, spotifyID);
 
-        }
-        public void RemoveAlbum(Album album)
+        public void RemoveAlbum(IAlbum album)
         {
             RemoveTracks(_database.FindTracks(album));
             _database.RemoveAlbum(album);
         }
-        public void RemoveAlbums(List<Album> albums)
+        public void RemoveAlbums(List<IAlbum> albums)
         {
             foreach (var album in albums)
             {
@@ -188,16 +167,7 @@ namespace MusicLog
         }
 
 
-        public void AddTrack(string trackName, string trackSpotifyID, Album album)
-        {
-            // Will throw exception if album's ArtistID is empty
-            album = AlbumInDBConfirmation(album);
-
-            Track newTrack = new Track(trackName, trackSpotifyID, album.ID, album.ArtistID);
-            _database.AddTrack(newTrack);
-            RemoveIfDuplicate(newTrack);
-        }
-        public void AddTrack(Track track, Album album)
+        public void AddTrack(ITrack track, IAlbum album)
         {
             album = AlbumInDBConfirmation(album);
 
@@ -206,7 +176,7 @@ namespace MusicLog
             _database.AddTrack(track);
             RemoveIfDuplicate(track);
         }
-        public void AddTracks(List<Track> tracks, Album album)
+        public void AddTracks(List<ITrack> tracks, IAlbum album)
         {
             album = AlbumInDBConfirmation(album);
 
@@ -219,25 +189,21 @@ namespace MusicLog
             }
         }
 
-        public void RemoveTrack(string name, string spotifyID)
-        {
-            _database.RemoveTrack(name, spotifyID);
-        }
-        public void RemoveTrack(Track track)
+        
+        public void RemoveTrack(ITrack track)
         {
             _database.RemoveTrack(track);
         }
-        public void RemoveTracks(List<Track> tracks)
+        public void RemoveTracks(List<ITrack> tracks)
         {
             _database.RemoveTracks(tracks);
         }
 
-
-        private Artist ArtistInDBConfirmation(Artist artist)
+        private IArtist ArtistInDBConfirmation(IArtist artist)
         {
             // Makes sure artist exist, if not then adds to database
             // Returns instance of artist in the database
-            Artist foundArtist = _database.FindArtist(artist);
+            IArtist foundArtist = _database.FindArtist(artist);
             if (foundArtist == null)
             {
                 _database.AddArtist(artist);
@@ -245,11 +211,40 @@ namespace MusicLog
             }
             return foundArtist;
         }
-        private Album AlbumInDBConfirmation(Album album)
+        private IArtist ArtistInDBConfirmation(SpotifyArtist artist)
+        {
+            // Makes sure artist exist, if not then adds to database
+            // Returns instance of artist in the database
+            SpotifyArtist foundArtist = (SpotifyArtist)_database.FindArtist(artist);
+            if (foundArtist == null)
+            {
+                _database.AddArtist(artist);
+                return artist;
+            }
+            return foundArtist;
+        }
+        private IAlbum AlbumInDBConfirmation(IAlbum album)
         {
             // Makes sure album exists, if not then adds to database
             // Returns instance of album in the database
-            Album foundAlbum = _database.FindAlbum(album);
+            IAlbum foundAlbum = _database.FindAlbum(album);
+
+            if (foundAlbum == null)
+            {
+                if (album.ArtistID == Guid.Empty)
+                {
+                    throw new System.ArgumentException("Album is missing artist parent");
+                }
+                _database.AddAlbum(album);
+                return album;
+            }
+            return foundAlbum;
+        }
+        private IAlbum AlbumInDBConfirmation(SpotifyAlbum album)
+        {
+            // Makes sure album exists, if not then adds to database
+            // Returns instance of album in the database
+            SpotifyAlbum foundAlbum = (SpotifyAlbum)_database.FindAlbum(album);
 
             if (foundAlbum == null)
             {
@@ -263,26 +258,25 @@ namespace MusicLog
             return foundAlbum;
         }
 
-
-        private void RemoveIfDuplicate(Artist artist)
+        private void RemoveIfDuplicate(IArtist artist)
         {
-            Artist foundArtist = _database.FindArtist(artist);
+            IArtist foundArtist = _database.FindArtist(artist);
             if (foundArtist != artist)
             {
                 _database.RemoveArtist(artist);
             }
         }
-        private void RemoveIfDuplicate(Album album)
+        private void RemoveIfDuplicate(IAlbum album)
         {
-            Album foundAlbum = _database.FindAlbum(album);
+            IAlbum foundAlbum = _database.FindAlbum(album);
             if (foundAlbum != album)
             {
                 _database.RemoveAlbum(album);
             }
         }
-        private void RemoveIfDuplicate(Track track)
+        private void RemoveIfDuplicate(ITrack track)
         {
-            Track foundTrack = _database.FindTrack(track);
+            ITrack foundTrack = _database.FindTrack(track);
             if (foundTrack != track)
             {
                 _database.RemoveTrack(track);
@@ -295,13 +289,13 @@ namespace MusicLog
             _spotifyAuth = SpotifyApi.GetAuthObjByImplicitGrant(creds.SpotifyID).Result;
         }
 
-        public List<Artist> GetSpotifyArtists(string query)
+        public List<SpotifyArtist> GetSpotifyArtists(string query)
         {
             List<FullArtist> items = SpotifyApi.SearchArtists(query, _spotifyAuth);
-            List<Artist> artistList = new List<Artist>();
+            List<SpotifyArtist> artistList = new List<SpotifyArtist>();
             foreach (FullArtist artist in items)
             {
-                Artist newArtist = new Artist
+                SpotifyArtist newArtist = new SpotifyArtist
                 {
                     Name = artist.Name,
                     SpotifyID = artist.Id
@@ -310,13 +304,13 @@ namespace MusicLog
             }
             return artistList;
         }
-        public List<Album> GetSpotifyAlbums(Artist artistObj)
+        public List<SpotifyAlbum> GetSpotifyAlbums(SpotifyArtist artistObj)
         {
             List<SimpleAlbum> SimpleAlbumList = SpotifyApi.SearchAlbums(artistObj, _spotifyAuth);
-            List<Album> AlbumList = new List<Album>();
+            List<SpotifyAlbum> AlbumList = new List<SpotifyAlbum>();
             foreach (SimpleAlbum album in SimpleAlbumList)
             {
-                Album newAlbum = new Album
+                SpotifyAlbum newAlbum = new SpotifyAlbum
                 {
                     Name = album.Name,
                     SpotifyID = album.Id
@@ -324,29 +318,33 @@ namespace MusicLog
                 AlbumList.Add(newAlbum);
 
             }
-            return DeleteDuplicateAlbums(AlbumList);
+            return GetUniqueSpotifyAlbums(AlbumList);
         }
-        public List<Track> GetSpotifyTracks(Album albumObj)
+        public List<SpotifyTrack> GetSpotifyTracks(SpotifyAlbum albumObj)
         {
             List<SimpleTrack> SimpleTrackList = SpotifyApi.SearchTracks(albumObj, _spotifyAuth);
-            List<Track> TrackList = new List<Track>();
+            List<SpotifyTrack> TrackList = new List<SpotifyTrack>();
             foreach (SimpleTrack track in SimpleTrackList)
             {
-                Track NewTrack = new Track(track.Name, track.Id);
+                SpotifyTrack NewTrack = new SpotifyTrack
+                {
+                    Name = track.Name,
+                    SpotifyID = track.Id
+                };
                 NewTrack.TrackNo = track.TrackNumber;
                 TrackList.Add(NewTrack);
             }
             return TrackList;
         }
 
-        private List<Album> DeleteDuplicateAlbums(List<Album> albums)
+        private List<SpotifyAlbum> GetUniqueSpotifyAlbums(List<SpotifyAlbum> albums)
         {
             if (albums.Count == 0)
             {
                 return albums;
             }
 
-            List<Album> albumRemovalList = new List<Album>();
+            List<SpotifyAlbum> albumRemovalList = new List<SpotifyAlbum>();
             List<int> albumTrackCount = new List<int>();
 
             albumTrackCount.Add(_database.FindTracks(albums[0]).Count);
@@ -378,7 +376,7 @@ namespace MusicLog
         }
 
 
-        public void UpdateArtist(Artist artist)
+        public void UpdateArtist(IArtist artist)
         {
             // Getting tracked albums from artist
             var trackedAlbums = _database.FindAlbums(artist)
@@ -398,7 +396,7 @@ namespace MusicLog
             foreach (var lastFMTrack in tracks)
             {
                 // Matching correct album
-                Album matchedAlbum = trackedAlbums.Find(a => a.Name == lastFMTrack.album.text);
+                IAlbum matchedAlbum = trackedAlbums.Find(a => a.Name == lastFMTrack.album.text);
 
                 if (matchedAlbum == null)
                 {
@@ -406,8 +404,8 @@ namespace MusicLog
                 }
 
                 // Finding correct song to modify uts
-                List<Track> songList = _database.FindTracks(matchedAlbum);
-                foreach (Track dbTrack in songList)
+                List<ITrack> songList = _database.FindTracks(matchedAlbum);
+                foreach (ITrack dbTrack in songList)
                 {
                     if (lastFMTrack.name.ToLower() != dbTrack.Name.ToLower())
                     {
@@ -420,7 +418,7 @@ namespace MusicLog
                 }
             }
         }
-        public void UpdateArtists(List<Artist> artists)
+        public void UpdateArtists(List<IArtist> artists)
         {
             foreach (var artist in artists)
             {
@@ -429,48 +427,48 @@ namespace MusicLog
         }
         public void UpdateAllArtists()
         {
-            List<Artist> artists = _database.GetArtists();
-            foreach (Artist artist in artists)
+            List<IArtist> artists = _database.GetArtists();
+            foreach (IArtist artist in artists)
             {
                 UpdateArtist(artist);
             }
         }
 
-        public void RetrieveMissingAlbums(Artist artist)
+        public void RetrieveMissingAlbums(SpotifyArtist artist)
         {
-            List<Album> spotifyAlbumRetrieval = GetSpotifyAlbums(artist);
-            AddAlbums(spotifyAlbumRetrieval, artist);
-            foreach (Album album in spotifyAlbumRetrieval)
+            List<SpotifyAlbum> spotifyAlbumRetrieval = GetSpotifyAlbums(artist);
+            AddAlbums(spotifyAlbumRetrieval.Cast<IAlbum>().ToList(), artist);
+            foreach (var album in spotifyAlbumRetrieval)
             {
-                AddTracks(GetSpotifyTracks(album), album);
+                AddTracks(GetSpotifyTracks(album).Cast<ITrack>().ToList(), album);
             }
         }
 
-        public void UpdateHistory(int unix, Track track)
+        public void UpdateHistory(int unix, ITrack track)
         {
             track.LastListenedUnix = unix;
         }
-        public void UpdateHistory(DateTime time, Track track)
+        public void UpdateHistory(DateTime time, ITrack track)
         {
             var dateTimeOffset = new DateTimeOffset(time);
             int uts = (int)dateTimeOffset.ToUnixTimeSeconds();
             UpdateHistory(uts, track);
         }
-        public void UpdateHistory(int unix, Album album)
+        public void UpdateHistory(int unix, IAlbum album)
         {
-            List<Track> tracks = _database.FindTracks(album);
-            foreach (Track track in tracks)
+            List<ITrack> tracks = _database.FindTracks(album);
+            foreach (ITrack track in tracks)
             {
                 UpdateHistory(unix, track);
             }
         }
-        public void UpdateHistory(DateTime time, Album album)
+        public void UpdateHistory(DateTime time, IAlbum album)
         {
             var dateTimeOffset = new DateTimeOffset(time);
             int uts = (int)dateTimeOffset.ToUnixTimeSeconds();
 
-            List<Track> tracks = _database.FindTracks(album);
-            foreach (Track track in tracks)
+            List<ITrack> tracks = _database.FindTracks(album);
+            foreach (ITrack track in tracks)
             {
                 UpdateHistory(uts, track);
             }
@@ -502,12 +500,15 @@ namespace MusicLog
 
             foreach (var guid in playlist.Albums)
             {
-                var album = (Album)GetMusicObject(guid);
-                List<Track> trackList = GetTracks(album);
-                foreach (var track in trackList)
+                IAlbum album = (IAlbum)GetMusicObject(guid);
+                if (album is SpotifyAlbum)
                 {
-                    trackUris.Add(track.SpotifyID);
-                }
+                    List<SpotifyTrack> trackList = GetTracks(album).Cast<SpotifyTrack>().ToList();
+                    foreach (var track in trackList)
+                    {
+                        trackUris.Add(track.SpotifyID);
+                    }
+                }               
             }
 
             FullPlaylist newPlaylist = SpotifyApi.CreatePlaylist(playlist.Name, _settings.Creds.SpotifyUser, _spotifyAuth);
