@@ -9,6 +9,6 @@ namespace MusicLog
     public interface IMusicObject
     {
         string Name { get; set; }
-        Guid ID { get; set; }       
+        string ID { get; set; }
     }
 }

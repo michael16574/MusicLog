@@ -144,97 +144,40 @@ namespace MusicLog
 
         public IArtist FindArtist(IArtist artist)
         {
-            IArtist activeArtist = null;
-            switch (artist)
-            {
-                case SpotifyArtist s:
-                    activeArtist = FindArtist(s);
-                    break;
-                case CustomArtist a:
-                    activeArtist = FindArtist(a);
-                    break;                  
-            }
-            
+            IArtist activeArtist = artist.GetMatchingArtistFrom(_database.Artists);        
             return activeArtist;
         }
-        public IArtist FindArtist(Guid artistID)
+        public IArtist FindArtist(string artistID)
         {
             IArtist activeArtist = _database.Artists.FirstOrDefault(a => a.ID == artistID);
             return activeArtist;
         }
-        private IArtist FindArtist(CustomArtist artist)
-        {
-            var artists = _database.Artists.Where(a => a is CustomArtist).Cast<CustomArtist>();
-            CustomArtist matchedArtist = artists.FirstOrDefault(a => a.Name == artist.Name);
-            return matchedArtist;
-        }
-        private IArtist FindArtist(SpotifyArtist artist)
-        {
-            var spotifyArtists = _database.Artists.Where(a => a is SpotifyArtist).Cast<SpotifyArtist>();
-            SpotifyArtist matchedArtist = spotifyArtists.FirstOrDefault(a => a.Name == artist.Name && a.SpotifyID == artist.SpotifyID);
-            return matchedArtist;
-        }
         
         public IAlbum FindAlbum(IAlbum album)
         {
-            IAlbum activeAlbum = null;
-            switch (album)
-            {
-                case SpotifyAlbum s:
-                    activeAlbum = FindAlbum(s);
-                    break;
-                case CustomAlbum a:
-                    activeAlbum = FindAlbum(a);
-                    break;
-            }
-
+            IAlbum activeAlbum = album.GetMatchingAlbumFrom(_database.Albums);
             return activeAlbum;
         }
-        public IAlbum FindAlbum(Guid albumID)
+        public IAlbum FindAlbum(string albumID)
         {
             IAlbum activeAlbum = _database.Albums.FirstOrDefault(a => a.ID == albumID);
             return activeAlbum;
         }
-        private IAlbum FindAlbum(CustomAlbum album)
-        { 
-            var albums = _database.Albums.Where(a => a is CustomAlbum).Cast<CustomAlbum>();
-            CustomAlbum matchedAlbum = albums.FirstOrDefault(a => a.Name == album.Name);
-            return matchedAlbum;
-        }
-        private IAlbum FindAlbum(SpotifyAlbum album)
-        {
-            var spotifyAlbums = _database.Albums.Where(a => a is SpotifyAlbum).Cast<SpotifyAlbum>();
-            SpotifyAlbum matchedAlbum = spotifyAlbums.FirstOrDefault(a => a.Name == album.Name && a.SpotifyID == album.SpotifyID);
-            return matchedAlbum;
-        }
         
         public List<IAlbum> FindAlbums(IArtist artist)
         {
-            // Finds all albums linked to artist through ArtistID
             List<IAlbum> albums = _database.Albums.Where(a => a.ArtistID == artist.ID).ToList();
             return albums;
         }
 
         public ITrack FindTrack(ITrack track)
         {
-            var activeTrack = _database.Tracks.FirstOrDefault(t => t.Name == track.Name);
+            ITrack activeTrack = track.GetMatchingTrackFrom(_database.Tracks);
             return activeTrack;
         }
-        public ITrack FindTrack(Guid trackID)
+        public ITrack FindTrack(string trackID)
         {
             ITrack activeTrack = _database.Tracks.FirstOrDefault(t => t.ID == trackID);
-            return activeTrack;
-        }
-        private ITrack FindTrack(CustomTrack track)
-        {
-            var tracks = _database.Tracks.Where(t => t is CustomTrack).Cast<CustomTrack>();
-            CustomTrack activeTrack = tracks.FirstOrDefault(t => t.Name == track.Name);
-            return activeTrack;
-        }
-        private ITrack FindTrack(SpotifyTrack track)
-        {
-            var spotifyTracks = _database.Tracks.Where(t => t is SpotifyTrack).Cast<SpotifyTrack>();
-            SpotifyTrack activeTrack = spotifyTracks.FirstOrDefault(t => t.Name == track.Name && t.SpotifyID == track.SpotifyID);
             return activeTrack;
         }
         
@@ -250,7 +193,7 @@ namespace MusicLog
             return tracks;
         }
 
-        public IMusicObject FindMusicObject(Guid musicObjectID)
+        public IMusicObject FindMusicObject(string musicObjectID)
         {
             var musicObjectList = new List<IMusicObject>();
             return musicObjectList.Union(_database.Artists)
@@ -259,7 +202,7 @@ namespace MusicLog
                                   .Where(m => m.ID == musicObjectID)
                                   .FirstOrDefault();
         }
-        public List<IMusicObject> FindMusicObjects(List<Guid> musicObjectIDs)
+        public List<IMusicObject> FindMusicObjects(List<string> musicObjectIDs)
         {
             var musicObjectList = new List<IMusicObject>();
             return musicObjectList.Union(_database.Artists)

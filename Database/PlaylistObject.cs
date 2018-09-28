@@ -9,38 +9,24 @@ namespace MusicLog
     public class PlaylistObject
     {
         public string Name { get; set; }
-        public List<Guid> Albums { get; set; }
-        public Guid ID { get; set; }
+        public List<string> Albums { get; set; }
+        public string ID { get; set; }
 
         public PlaylistObject()
         {
-            Albums = new List<Guid>();
-            ID = Guid.NewGuid();           
+            Albums = new List<string>();
+            ID = "playlist:" + Guid.NewGuid();           
         }
 
-        public PlaylistObject(string name)
+        public void Add(string id)
         {
-            Name = name;
-            Albums = new List<Guid>();
-            ID = Guid.NewGuid();
+            Albums.Add(id);
         }
-
-        public PlaylistObject(string name, List<Guid> albums)
+        public void Remove(string id)
         {
-            Name = name;
-            Albums = albums;
-            ID = Guid.NewGuid();
-        }
-
-        public void Add(Guid guid)
-        {
-            Albums.Add(guid);
-        }
-        public void Remove(Guid guid)
-        {
-            foreach (Guid id in Albums)
+            foreach (string albumID in Albums)
             {
-                if (id == guid)
+                if (id == albumID)
                 { Albums.Remove(id); }
             }
         }

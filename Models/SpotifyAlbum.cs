@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MusicLog
 {
@@ -6,16 +7,31 @@ namespace MusicLog
     {
         public string Name { get; set; }
         public string SpotifyID { get; set; }
-        public Guid ID { get; set; }
+        public string ID { get; set; }
 
-        public Guid ArtistID { get; set; }
+        public string ArtistID { get; set; }
         public bool Tracked { get; set; }
 
         public SpotifyAlbum()
         {
-            ArtistID = Guid.Empty;
-            ID = Guid.NewGuid();
+            ArtistID = String.Empty;
+            ID = "spotify:" + Guid.NewGuid().ToString();
             Tracked = false;
+        }
+
+        public IAlbum GetMatchingAlbumFrom(List<IAlbum> albums)
+        {
+            IAlbum query = null;
+            var spotifyAlbums = albums.FindAll(a => a is SpotifyAlbum);
+            foreach (SpotifyAlbum album in spotifyAlbums)
+            {
+                if (album.Name == Name &&
+                    album.SpotifyID == SpotifyID)
+                {
+                    query = album;
+                }
+            }
+            return query;
         }
     }
 }

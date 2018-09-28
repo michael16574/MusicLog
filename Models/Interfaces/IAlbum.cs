@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MusicLog
 {
     public interface IAlbum : IMusicObject
     {
-        Guid ArtistID { get; set; }
+        string ArtistID { get; set; }
         bool Tracked { get; set; }
+
+        IAlbum GetMatchingAlbumFrom(List<IAlbum> album);
     }
 }

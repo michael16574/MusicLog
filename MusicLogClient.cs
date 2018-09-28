@@ -59,12 +59,12 @@ namespace MusicLog
             return _database.FindAlbum(track.AlbumID);
         }
 
-        public IMusicObject GetMusicObject(Guid musicObjectID)
+        public IMusicObject GetMusicObject(string musicObjectID)
         {
             return _database.FindMusicObject(musicObjectID);
         }
 
-        public List<IMusicObject> GetMusicObjects(List<Guid> musicObjectIDs)
+        public List<IMusicObject> GetMusicObjects(List<string> musicObjectIDs)
         {
             return _database.FindMusicObjects(musicObjectIDs);
         }
@@ -231,7 +231,7 @@ namespace MusicLog
 
             if (foundAlbum == null)
             {
-                if (album.ArtistID == Guid.Empty)
+                if (album.ArtistID == String.Empty)
                 {
                     throw new System.ArgumentException("Album is missing artist parent");
                 }
@@ -248,7 +248,7 @@ namespace MusicLog
 
             if (foundAlbum == null)
             {
-                if (album.ArtistID == Guid.Empty)
+                if (album.ArtistID == String.Empty)
                 {
                     throw new System.ArgumentException("Album is missing artist parent");
                 }

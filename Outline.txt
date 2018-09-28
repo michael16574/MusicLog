@@ -25,5 +25,15 @@ Additional Features:
 (D) History Page - All listens ordered, general textbox filter, date selection
 (D) Playlists - Auto-spotify playlist making with selected albums
 (D) Custom Artist / Album Functionality
+( ) Spotify Track Search - Can insert highlighted into custom albums
+		1) Searches tracks then matches it with custom tracks (turning it into spotify tracks)
+		2) Needs seperate window which batch matches, dropdown menu if incorrect matching
+		3) Batch paste in names into a custom album in database tab
+		4) 
 ( ) Database Upgrade - SQL
 ( ) Inhouse Spotify Player
+
+BUGS:
+* Breaks when selecting empty playlist
+
+

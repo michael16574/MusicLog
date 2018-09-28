@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MusicLog
 {
     public interface ITrack : IMusicObject
     {
-        Guid ArtistID { get; set; }
-        Guid AlbumID { get; set; }
+        string ArtistID { get; set; }
+        string AlbumID { get; set; }
         int TrackNo { get; set; }
         int LastListenedUnix { get; set; }
+
+        ITrack GetMatchingTrackFrom(List<ITrack> tracks);
     }
 }
