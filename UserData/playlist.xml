@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPlaylistObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PlaylistObject>
+    <Name>Setlist #1</Name>
+    <Albums />
+    <ID>63a929ac-a768-4d6c-b193-d8d6376a58ac</ID>
+  </PlaylistObject>
+  <PlaylistObject>
+    <Name>Setlist #2</Name>
+    <Albums />
+    <ID>47b41c45-50a4-4084-a825-677d302c5515</ID>
+  </PlaylistObject>
+  <PlaylistObject>
+    <Name>Setlist #3</Name>
+    <Albums />
+    <ID>69322d7d-ca4b-45bb-b866-5d764dd17747</ID>
+  </PlaylistObject>
+  <PlaylistObject>
+    <Name>Setlist #4</Name>
+    <Albums />
+    <ID>1bba774f-5bbc-4a1b-9901-1074b1261777</ID>
+  </PlaylistObject>
+</ArrayOfPlaylistObject>

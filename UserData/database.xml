@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MusicObjectTable>
+  <IArtists>
+    <IArtist AssemblyQualifiedName="MusicLog.CustomArtist, MusicLog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <CustomArtist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Name>1</Name>
+        <ID>a7463de5-9e87-461e-bc92-7b7e020d5e56</ID>
+      </CustomArtist>
+    </IArtist>
+  </IArtists>
+  <IAlbums>
+    <IAlbum AssemblyQualifiedName="MusicLog.CustomAlbum, MusicLog, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <CustomAlbum xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <Name>2</Name>
+        <ID>cd1db509-1585-48ea-a124-e9b26afa2066</ID>
+        <ArtistID>a7463de5-9e87-461e-bc92-7b7e020d5e56</ArtistID>
+        <Tracked>false</Tracked>
+      </CustomAlbum>
+    </IAlbum>
+  </IAlbums>
+  <ITracks />
+</MusicObjectTable>
