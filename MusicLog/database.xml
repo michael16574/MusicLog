@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfArtist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Artist>
+    <Id>12Chz98pHFMPJEknJQMWvI</Id>
+    <Albums>
+      <Album>
+        <Name />
+        <Id>2wart5Qjnvx1fd7LPdQxgJ</Id>
+        <Tracks>
+          <Track>
+            <Name>Dead Inside</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>[Drill Sergeant]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Psycho</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Mercy</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Reapers</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>The Handler</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>[JFK]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Defector</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Revolt</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Aftermath</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>The Globalist</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Drones</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+        </Tracks>
+      </Album>
+      <Album>
+        <Name />
+        <Id>3KuXEGcqLcnEYWnn3OEGy0</Id>
+        <Tracks>
+          <Track>
+            <Name>Supremacy</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Madness</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Panic Station</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Prelude</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Survival</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Follow Me</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Animals</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Explorers</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Big Freeze</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Save Me</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Liquid State</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>The 2nd Law: Unsustainable</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>The 2nd Law: Isolated System</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+        </Tracks>
+      </Album>
+      <Album>
+        <Name />
+        <Id>0eFHYz8NmK75zSplL5qlfM</Id>
+        <Tracks>
+          <Track>
+            <Name>Uprising</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Resistance</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Undisclosed Desires</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>United States Of Eurasia [+Collateral Damage]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Guiding Light</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Unnatural Selection</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>MK Ultra</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>I Belong To You [+Mon Coeur S'Ouvre A Ta Voix]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Exogenesis: Symphony Part 1 [Overture]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Exogenesis: Symphony Part 2 [Cross-pollination]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+          <Track>
+            <Name>Exogenesis: Symphony Part 3 [Redemption]</Name>
+            <LastListenedUTS>0</LastListenedUTS>
+          </Track>
+        </Tracks>
+      </Album>
+    </Albums>
+  </Artist>
+</ArrayOfArtist>
