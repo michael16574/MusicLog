@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Programs\MusicLog\MusicLogWPF\obj\Debug\
+D:\Projects\MusicLog\MusicLogWPF\obj\Debug\
 MusicLogWPF
 none
 false
 DEBUG;TRACE
-C:\Programs\MusicLog\MusicLogWPF\App.xaml
+D:\Projects\MusicLog\MusicLogWPF\App.xaml
 2329876642
 
-351588542640
-17-249483296
+35612833113
+17-1232547601
 Views\MainWindow.xaml;Views\TextBoxWindow.xaml;
 
-True
+False
 

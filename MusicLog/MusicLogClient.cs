@@ -329,9 +329,24 @@ namespace MusicLog
                 SpotifyTrack NewTrack = new SpotifyTrack
                 {
                     Name = track.Name,
+                    SpotifyID = track.Id,
+                    TrackNo = track.TrackNumber
+                };
+                TrackList.Add(NewTrack);
+            }
+            return TrackList;
+        }
+        public List<SpotifyTrack> GetSpotifyTracks(string query)
+        {
+            List<FullTrack> FullTrackList = SpotifyApi.SearchTracksByQuery(query, _spotifyAuth);
+            List<SpotifyTrack> TrackList = new List<SpotifyTrack>();
+            foreach (FullTrack track in FullTrackList)
+            {
+                SpotifyTrack NewTrack = new SpotifyTrack
+                {
+                    Name = track.Name,
                     SpotifyID = track.Id
                 };
-                NewTrack.TrackNo = track.TrackNumber;
                 TrackList.Add(NewTrack);
             }
             return TrackList;

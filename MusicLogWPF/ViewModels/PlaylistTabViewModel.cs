@@ -218,7 +218,7 @@ namespace MusicLogWPF
         {
             if (SelectedPlaylist == null || SelectedPlaylist.Albums.Count == 0)
             {
-                SelectedPlaylist = null;
+                ActiveAlbums = null;
                 return;
             }
 

@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\MusicLog"
+    "\\MusicLog",
+    "\\MusicLogWPF"
   ],
-  "SelectedNode": "\\MusicLog\\MusicLog.csproj",
+  "SelectedNode": "\\MusicLog.sln",
   "PreviewInSolutionExplorer": false
 }

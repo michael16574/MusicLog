@@ -37,7 +37,7 @@ namespace MusicLogWPF
 
         public MainWindowViewModel()
         {
-            string rootPath = "C:\\Programs\\MusicLog\\UserData\\";
+            string rootPath = "D:\\Projects\\MusicLog\\UserData\\";
             _musicLog = new MusicLogClient(new UserSettings(rootPath + "database.xml", rootPath + "playlist.xml", rootPath + "credentials.xml"));
             RefreshTab(0);
         }

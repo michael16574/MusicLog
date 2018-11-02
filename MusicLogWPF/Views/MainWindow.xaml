@@ -214,14 +214,19 @@
 				<TextBox Text="{Binding SpotifyQuery, UpdateSourceTrigger=PropertyChanged}"
 						 HorizontalAlignment="Left" Height="25" Margin="10,31,0,0" TextWrapping="Wrap"
 						 VerticalAlignment="Top" Width="218" RenderTransformOrigin="-0.987,0.815" Grid.Column="1"/>
-				<Button Content="Search" Command="{Binding SearchSpotifyArtistsCommand}" 
+				<Button Content="Search" Command="{Binding SearchTrackCommand}" 
 						HorizontalAlignment="Left" Margin="243,30,0,0" VerticalAlignment="Top" 
 						Width="75" RenderTransformOrigin="-0.136,-0.191" Grid.Column="1"/>
-				<ListBox ItemsSource="{Binding SpotifyArtists}" DisplayMemberPath="Name"
-						 SelectedItem="{Binding SelectedSpotifyArtist}" Margin="10,82,10,74" Grid.Column="1"/>
-				<Button Content="Match Selected" Command="{Binding AddSpotifyArtistsToDatabaseCommand}" Margin="0,0,110,31" 
+				<ListBox ItemsSource="{Binding QueryTracks}" DisplayMemberPath="Name"
+						 SelectedItem="{Binding SelectedTrack}" Margin="10,82,10,74" Grid.Column="1"/>
+				<Button Content="Match Selected" Command="{Binding BindToTrack}" Margin="0,0,176,31" 
 						RenderTransformOrigin="0.067,0.414" Grid.Column="1" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="109"/>
-			</Grid>
+        <TextBox Text="{Binding SpotifyQuery, UpdateSourceTrigger=PropertyChanged}"
+      HorizontalAlignment="Left" Height="25" Margin="10,31,0,0" TextWrapping="Wrap"
+      VerticalAlignment="Top" Width="218" RenderTransformOrigin="-0.987,0.815" Grid.Column="1"/>
+                <Button Content="Add to Album" Command="{Binding AddToAlbum}" Margin="0,0,45,31" 
+            RenderTransformOrigin="0.067,0.414" Grid.Column="1" Height="27" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="109"/>
+            </Grid>
 		</TabItem>
 	</Controls:MetroTabControl>
 

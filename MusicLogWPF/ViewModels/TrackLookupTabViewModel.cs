@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MusicLogWPF
 {
@@ -22,9 +23,13 @@ namespace MusicLogWPF
 
         private MusicLogClient _musicLog;
 
+        public ICommand SearchTrackCommand { get; set; }
+
         public TrackLookupTabViewModel(MusicLogClient musicLog)
         {
             _musicLog = musicLog;
+            LoadCommands();
+
             GetArtists(new CustomArtist());
         }
 
@@ -32,6 +37,64 @@ namespace MusicLogWPF
         public ObservableCollection<TreeArtist> Artists
         { get => _artists; set => _artists = value; }
 
+        private ObservableCollection<SpotifyTrackViewModel> _queryTracks;
+        public ObservableCollection<SpotifyTrackViewModel> QueryTracks
+        {
+            get
+            {
+                return _queryTracks;
+            }
+            set
+            {
+                if (!string.Equals(this._spotifyQuery, value))
+                {
+                    _queryTracks = value;
+                    RaisePropertyChanged("QueryTracks");
+                }
+            }
+        }
+
+        private string _spotifyQuery;
+        public string SpotifyQuery
+        {
+            get
+            {
+                return _spotifyQuery;
+            }
+            set
+            {
+                if (!string.Equals(this._spotifyQuery, value))
+                {
+                    _spotifyQuery = value;
+                    RaisePropertyChanged("SpotifyQuery");
+                }
+            }
+        }
+
+        private void LoadCommands()
+        {
+            SearchTrackCommand = new CustomCommand(SearchTrack, CanSearchTrack);
+        }
+
+        private void SearchTrack(object obj)
+        {
+            var tracks = _musicLog.GetSpotifyTracks(SpotifyQuery);
+            var trackVms = new List<SpotifyTrackViewModel>();
+            foreach (var track in tracks)
+            {
+                trackVms.Add(new SpotifyTrackViewModel(track));
+            }
+            QueryTracks = trackVms.ToObservableCollection();
+            
+        }
+        private bool CanSearchTrack(object obj)
+        {
+            if (String.IsNullOrWhiteSpace(SpotifyQuery))
+            {
+                return false;
+            }
+            return true;
+        }
 
         private void GetArtists()
         {
@@ -52,7 +115,12 @@ namespace MusicLogWPF
                 var newTreeArtist = new TreeArtist(artist, _musicLog);
                 Artists.Add(newTreeArtist);
             }
-        }      
+        }   
+        
+        private void BindToTrack()
+        {
+
+        }
  
     }
 

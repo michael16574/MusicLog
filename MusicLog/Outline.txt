@@ -26,14 +26,14 @@ Additional Features:
 (D) Playlists - Auto-spotify playlist making with selected albums
 (D) Custom Artist / Album Functionality
 ( ) Spotify Track Search - Can insert highlighted into custom albums
-		1) Searches tracks then matches it with custom tracks (turning it into spotify tracks)
-		2) Needs seperate window which batch matches, dropdown menu if incorrect matching
-		3) Batch paste in names into a custom album in database tab
+		1) Searches tracks then merges selected with custom tracks (turning it into spotify tracks) or can add directly to CUSTOM album
+		2) Needs seperate window which batch matches (searches each custom track by name), can see match before confirming to correct any mistakes; 5-10 alternatives
+		3) Batch paste in names into a custom album in database tab (custom tracks)
 		4) 
 ( ) Database Upgrade - SQL
 ( ) Inhouse Spotify Player
+( ) Fancy Image Based GUI
 
 BUGS:
-* Breaks when selecting empty playlist
 
 

@@ -92,6 +92,12 @@ namespace MusicLog
             return SimpleTrackList;
         }
 
+        public static List<FullTrack> SearchTracksByQuery(string query, SpotifyWebAPI authObj)
+        {   
+            List<FullTrack> tracks = authObj.SearchItems(query, SearchType.Track).Tracks.Items;
+            return tracks;
+        }
+
         public static FullPlaylist CreatePlaylist(string playlistName, string userID, SpotifyWebAPI authObj)
         {
             FullPlaylist spotifyPlaylist = authObj.CreatePlaylist(userID, playlistName);
