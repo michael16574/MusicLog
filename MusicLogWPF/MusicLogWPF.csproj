@@ -87,9 +87,16 @@
     <Compile Include="ViewModels\Wrapped\CustomTrackViewModel.cs" />
     <Compile Include="ViewModels\Wrapped\SpotifyTrackViewModel.cs" />
     <Compile Include="Converters\UnixTimeToLocalTimeConverter.cs" />
+    <Compile Include="Views\BatchTracksWindow.xaml.cs">
+      <DependentUpon>BatchTracksWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TextBoxWindow.xaml.cs">
       <DependentUpon>TextBoxWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\BatchTracksWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

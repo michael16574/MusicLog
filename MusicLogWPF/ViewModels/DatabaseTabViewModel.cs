@@ -48,6 +48,9 @@ namespace MusicLogWPF
 
         public ICommand MarkTrackListenedCommand { get; set; }
         public ICommand RemoveTrackHistoryCommand { get; set; }
+        public ICommand AddCustomTrackCommand { get; set; }
+        public ICommand AddMultipleCustomTracksCommand { get; set; }
+        public ICommand RemoveCustomTrackCommand { get; set; }
 
         public ICommand AddAlbumToPlaylistCommand { get; set; }
 
@@ -188,8 +191,11 @@ namespace MusicLogWPF
 
             MarkTrackListenedCommand = new CustomCommand(MarkTrackListened, CanMarkTrackListened);
             RemoveTrackHistoryCommand = new CustomCommand(RemoveTrackHistory, CanRemoveTrackHistory);
+            AddCustomTrackCommand = new CustomCommand(AddCustomTrack, CanAddCustomTrack);
+            AddMultipleCustomTracksCommand = new CustomCommand(AddMultipleCustomTracks, CanAddMultipleCustomTracks);
+            RemoveCustomTrackCommand = new CustomCommand(RemoveCustomTrack, CanRemoveCustomTrack);
 
-            AddAlbumToPlaylistCommand = new CustomCommand(AddAlbumToPlaylist, CanAddAlbumToPlaylist);
+        AddAlbumToPlaylistCommand = new CustomCommand(AddAlbumToPlaylist, CanAddAlbumToPlaylist);
         }
 
         private void AddCustomArtist(object obj)
@@ -396,6 +402,44 @@ namespace MusicLogWPF
             }
             return false;
         }
+
+        private void AddCustomTrack(object obj)
+        {
+            var dialog = new TextBoxWindow();
+            if (dialog.ShowDialog() == true)
+            {
+                var track = new CustomTrack()
+                {
+                    Name = dialog.ResponseText,
+                    TrackNo = _musicLog.GetTracks(SelectedAlbum.Album).Count() + 1
+                };
+
+                _musicLog.AddTrack(track, SelectedAlbum.Album);
+                ActiveTracks.Add(new CustomTrackViewModel(track));
+            }
+        }
+
+        private bool CanAddCustomTrack(object obj)
+        {
+            if (SelectedAlbum != null && SelectedAlbum.Album is CustomAlbum)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void AddMultipleCustomTracksCommand(object obj)
+        {
+            var batchInput = new BatchTracksWindow();
+        }
+
+
+        private void RemoveCustomTrack { get; set; }
+
+
+
+
+
 
         private void AddAlbumToPlaylist(object obj)
         {
