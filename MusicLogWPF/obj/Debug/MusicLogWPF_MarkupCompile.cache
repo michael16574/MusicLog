@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Projects\MusicLog\MusicLogWPF\App.xaml
-2329876642
+3-34117778
 
-31-1531563057
+32-335454814
 17-1232547601
-Views\MainWindow.xaml;Views\TextBoxWindow.xaml;
+Views\BatchTracksWindow.xaml;Views\MainWindow.xaml;Views\TextBoxWindow.xaml;
 
-False
+True
 
